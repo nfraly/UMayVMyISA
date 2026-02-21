@@ -24,6 +24,12 @@ class environment;
         this.mon_out2scb = mon_out2scb;
 
         gen = new(this.gen2driv);
+        driv = new(this.vif, this.gen2driv);
+        mon_in = new(this.vif, this.mon_in2scb);
+        mon_out = new(this.vif, this.mon_out2scb);
+        scb = new(this.vif, this.mon_in2scb, this.mon_out2scb);
+    endfunction
+
 
     task pre_test();
         driv.reset();
@@ -36,11 +42,15 @@ class environment;
             mon_in.main();
             mon_out.main();
             scb.main();
-        join_any
+        join_none
     endtask
 
     task post_test();
-        //post test stuff needs to go here
+        //Termination condition placeholder
+        repeat(10) @(posedge vif.clk);
+        wait(gen2driv.num() == '0);
+        wait(mon_in2scb.num() == '0);
+        wait(mon_out2scb.num() == '0);
     endtask
 
     task run;

@@ -1,14 +1,16 @@
 class scoreboard;
     mailbox mon_in2scb;
     mailbox mon_out2scb;
+    virtual intf vif; 
 
     byte unsigned ref_mem[10:0];
 
 
 
-    function new(mailbox mon_in2scb, mailbox mon_out2scb);
+    function new(virtual intf vif, mailbox mon_in2scb, mailbox mon_out2scb);
         this.mon_in2scb = mon_in2scb;
         this.mon_out2scb = mon_out2scb;
+        this.vif = vif;
     endfunction
 
     function bit comp(byte A, byte B);
@@ -17,6 +19,13 @@ class scoreboard;
         else 
             return 1;
     endfunction
+
+    task main;
+        fork
+            storeData();
+            readData();
+        join_none
+    endtask
 
     task storeData;
         transaction tx;
