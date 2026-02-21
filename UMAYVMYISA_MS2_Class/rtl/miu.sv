@@ -74,7 +74,7 @@ module miu (
           cache_if.cache_req_write <= wdata_r;
 
 	      // Cache accepted request
-          if (cache_if.cache_req_ready && cache_if.cache_req_ready) begin
+          if (cache_if.cache_req_ready && cache_if.cache_req_valid) begin
             cache_if.cache_req_valid <= 1'b0;
             state <= WAIT_RESP;
           end
