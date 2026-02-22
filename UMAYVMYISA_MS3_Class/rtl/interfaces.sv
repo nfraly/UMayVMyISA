@@ -18,12 +18,14 @@ interface iu_miu_if (input logic clk);
   
   // IU drives request fields and write data
   modport iu (
+    input clk,
     output mem_req, mem_we, mem_addr, mem_write,
     input mem_read, mem_done
   );
 
   // MIU accepts request, returns read data and completion
   modport miu (
+    input clk,
     input mem_req, mem_we, mem_addr, mem_write,
     output mem_read, mem_done
   );
