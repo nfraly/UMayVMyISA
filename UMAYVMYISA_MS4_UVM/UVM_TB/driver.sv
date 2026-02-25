@@ -15,10 +15,10 @@ class driver extends uvm_driver;
     endfunction
 
     virtual task run_phase (uvm_phase phase);
-        reg_item testObj;
         super.run_phase(phase);
 
         forever begin
+            reg_item testObj;
             `uvm_info (get_type_name(), $sformatf ("Waiting for data from sequencer", UVM_LOW);
             seq_item_port.get_next_item (testObj);
             drive_item (testObj);

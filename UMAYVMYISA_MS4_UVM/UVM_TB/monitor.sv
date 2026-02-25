@@ -20,9 +20,10 @@ class monitor extends uvm_monitor;
     endfunction
 
     virtual task run_phase (uvm_phase phase);
-        reg_item testObj = reg_item::type_id::create("testObj", this);
+        super.run_phase(phase);
         forever begin
             @(posedge vif.clk); //whatever signifies a new event
+            reg_item testObj = reg_item::type_id::create("testObj", this);
             testobj.members = vif.members; //grab the DUT output
             //do some coverage stuff here?
 
