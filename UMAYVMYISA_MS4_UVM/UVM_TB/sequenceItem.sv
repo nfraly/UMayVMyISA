@@ -1,11 +1,16 @@
+import system_widths_pkg::*;
 class reg_item extends uvm_sequence_item;
-    rand bit [ADDR_W-1:0] mem_addr;
-    rand bit [DATA_W-1:0] mem_write;
-    rand bit mem_we;
+    rand logic [ADDR_W-1:0] addr;
+    rand logic [DATA_W-1:0] wdata;
+    rand int unsigned core_id;
+    rand bit we;
     bit mem_req;
 
-    bit [DATA_W-1:0] mem_read;
+    logic [DATA_W-1:0] rdata;
     bit mem_done;
+
+    constraint c_core {core_id inside {[0:31]};}
+    constraint c_addr {addr inside {[0:(1<<ADDR_W)-1]};}
 
     `uvm_object_utils_begin(reg_item)
         `uvm_field_int(mem_addr, UVM_DEFAULT)
