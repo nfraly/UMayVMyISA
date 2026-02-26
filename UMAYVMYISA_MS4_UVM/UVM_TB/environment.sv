@@ -17,4 +17,10 @@ class env extends uvm_env;
        super.connect_phase(phase);
        a0.m0.mon_analysis_port.connect(sb0.m_analysis_imp);
    endfunction
+
+   task run_phase(uvm_phase phase);
+       super.run_phase(phase);
+   endtask
+
+
 endclass

@@ -19,13 +19,18 @@ class monitor extends uvm_monitor;
         end
     endfunction
 
+    function void connect_phase (uvm_phase phase);
+        super.connect_phase(phase);
+        `uvm_info("mon_class", "connect_phase monitor", UVM_MEDIUM)
+    endfunction
+
     virtual task run_phase (uvm_phase phase);
         super.run_phase(phase);
+        trace testObj = trace::type_id::create("testObj");
         forever begin
             @(posedge vif.clk); //whatever signifies a new event
-            reg_item testObj = reg_item::type_id::create("testObj", this);
-            testobj.members = vif.members; //grab the DUT output
-            //do some coverage stuff here?
+            testobj.inmembers = vif.inmembers; //grab the input for the DUT
+            testobj.outmembers = vif.outmembers; //grab the DUT output
 
             mon_analysis_port.write(testObj);
         end

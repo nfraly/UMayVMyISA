@@ -6,22 +6,12 @@ class coreTest extends uvm_test;
     endfunction
 
     env e0;
-    reg_item testObj;
     virtual intf vif;
 
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
 
         e0 = env::type_id::create("e0", this);
-
-        if (!uvm_config_db#(virtual intf)::get(this, null, "intf", vif))
-            `uvm_fatal("TEST", "Did not get vif");
-        uvm_config_db#(virtual intf)::set(this, "e0.a0.*", "intf", vif);
-
-        //some setup here we aren't ready for
-
-        testObj = gen_item_seq::type_id::create("testObj");
-        testObj.randomize();
     endfunction
 
     virtual task run_phase(uvm_phase phase);

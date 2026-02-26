@@ -20,16 +20,9 @@ class coreAgent extends uvm_agent;
         super.connect_phase(phase);
         d0.seq_item_port.connect(s0.seq_item_export);
     endfunction
+    
+    task run_phase (uvm_phase phase);
+        super.run_phase(phase);
+    endtask
 
-    if (get_is_active()) begin
-        coreSeqr = sequencer#(gen_item_seq)::type_id::create("coreSeqr", this);
-        coreDriv = driver::type_id::create("coreDriv", this);
-    end
-
-    coreMon = monitor::type_id::create("coreMon", this);
-
-    virtual function void connect_phase(uvm_phase phase);
-        if (get_is_active())
-            coreDriv.seq_item_port_connect(coreSeqr.seq_item_export);
-    endfunction
 endclass
