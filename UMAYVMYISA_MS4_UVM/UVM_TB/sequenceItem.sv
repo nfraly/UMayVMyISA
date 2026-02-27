@@ -1,5 +1,6 @@
 import system_widths_pkg::*;
-class trace extends uvm_sequence_item;
+class trace #(parameter CORES = 3) extends uvm_sequence_item;
+    localparam corewidth = $clog2(CORES);
     rand logic [27:0] payload;
     rand logic [3:0] opCode;
     rand logic [corewidth-1:0] targetCore;
@@ -47,5 +48,4 @@ class trace extends uvm_sequence_item;
         super.new(name);
     endfunction
 
-    function isMem
 endclass

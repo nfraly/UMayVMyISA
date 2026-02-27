@@ -6,7 +6,7 @@
 *    Return memory response to MIU
 */
 
-import system_widths_pkg::*;
+//import system_widths_pkg::*;
 
 module cache (
   input logic clk,
