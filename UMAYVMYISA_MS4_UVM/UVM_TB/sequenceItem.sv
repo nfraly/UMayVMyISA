@@ -35,6 +35,10 @@ class trace #(parameter CORES = 3) extends uvm_sequence_item;
     //        4'b1110:
     //        4'b1111:
 
+    function void post_randomize();
+        instruction = {opCode, payload};
+    endfunction
+
     `uvm_object_utils_begin(trace#(3))
         `uvm_field_int(instruction, UVM_DEFAULT)
         `uvm_field_int(targetCore, UVM_DEFAULT)
