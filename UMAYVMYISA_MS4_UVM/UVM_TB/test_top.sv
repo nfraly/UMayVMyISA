@@ -12,7 +12,7 @@ import uvm_pkg::*;
 `include "agent.sv"
 `include "environment.sv"
 `include "test.sv"
-//`include "scoreboard.sv"
+`include "scoreboard.sv"
 
 
 module top;

@@ -5,12 +5,12 @@ class env extends uvm_env;
     endfunction
 
    coreAgent a0;
-   //scoreboard s0;
+   scoreboard s0;
 
    virtual function void build_phase(uvm_phase phase);
        super.build_phase(phase);
        a0 = coreAgent::type_id::create("a0", this);
-       //s0 = scoreboard::type_id::create("s0", this);
+       s0 = scoreboard::type_id::create("s0", this);
    endfunction
 
    virtual function void connect_phase(uvm_phase phase);
