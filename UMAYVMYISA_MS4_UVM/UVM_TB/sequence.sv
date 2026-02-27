@@ -1,5 +1,5 @@
 class traceItem #(parameter CORES = 3) extends uvm_sequence;
-    `uvm_object_utils(traceItem)
+    `uvm_object_utils(traceItem#(3))
     localparam corewidth = $clog2(CORES);
     function new(string name = "traceItem");
         super.new(name);

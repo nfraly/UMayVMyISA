@@ -35,7 +35,7 @@ class trace #(parameter CORES = 3) extends uvm_sequence_item;
     //        4'b1110:
     //        4'b1111:
 
-    `uvm_object_utils_begin(trace)
+    `uvm_object_utils_begin(trace#(3))
         `uvm_field_int(instruction, UVM_DEFAULT)
         `uvm_field_int(targetCore, UVM_DEFAULT)
         //`uvm_field_int(mem_read, UVM_DEFAULT)
