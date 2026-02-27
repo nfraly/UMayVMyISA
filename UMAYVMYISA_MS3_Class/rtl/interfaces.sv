@@ -7,6 +7,12 @@ endpackage
 
 import system_widths_pkg::*;
 
+// Instruction interface
+interface instr_if;
+  logic valid, ready;
+  logic [31:0] instr;
+endinterface
+
 // Instruction Unit and Memory Interface Unit
 interface iu_miu_if (input logic clk);
   logic mem_req;		// Request in progress 
