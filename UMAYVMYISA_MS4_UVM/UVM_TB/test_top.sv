@@ -20,12 +20,12 @@ module top;
 
     logic clk;
     logic rst;
-    virtual intf vif;
+    intf vif (clk, rst);
 
     //interface and dut instantiation go here
     
     initial begin
-        uvm_config_db #(vif)::set(null, "*", "vif", intf);
+        uvm_config_db #(virtual intf)::set(null, "*", "vif", vif);
     end
     
     initial begin
