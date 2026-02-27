@@ -39,6 +39,26 @@ class traceItem extends uvm_sequence;
     `uvm_info("SEQ", $sformatf("Done generation of %0d items", tx_count), UVM_LOW)
 endtask
 
+task directedStore(logic [corewidth-1:0] targetCore);
+    trace tx = trace::type_id::create("tx");
+    start_item(tx);
+    tx.randomize();
+    tx.instruction[3:0] = 4'b0110;
+    tx.targetCore = targetCore;
+    `uvm_info("SEQ", $sformatf("Generated a directed Store test to core %d", targetCore, UVM_LOW);
+endtask
+
+task directedLoad(logic [corewidth-1:0] targetCore);
+    trace tx = trace::type_id::create("tx");
+    start_item(tx);
+    tx.randomize();
+    tx.instruction[3:0] = 4'b0101;
+    tx.targetCore = targetCore;
+    `uvm_info("SEQ", $sformatf("Generated a directed Load test to core %d", targetCore, UVM_LOW);
+endtask
+
+
+
 endclass
 
 
