@@ -3,9 +3,13 @@
 import uvm_pkg::*;
 `include "uvm_macros.svh"
 
+`include "../rtl/*.sv"
+`include "../rtl/alu/*.sv"
+`include "../rtl/arbiter/*.sv"
+
+`include "sequenceItem.sv"
 `include "sequence.sv"
 `include "sequencer.sv"
-`include "sequenceItem.sv"
 `include "driver.sv"
 `include "agent.sv"
 `include "environment.sv"

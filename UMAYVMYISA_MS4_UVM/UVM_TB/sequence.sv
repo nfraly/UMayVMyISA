@@ -10,9 +10,10 @@ class traceItem extends uvm_sequence;
 
     int unsigned addr_base;
     int i, c;
+    trace tx;
 
     task body();
-    trace tx = trace::type_id::create("tx"); 
+    tx = trace::type_id::create("tx"); 
     start_item(tx);
     tx.randomize();
     directedStore(tx.targetCore);
