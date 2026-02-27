@@ -3,27 +3,29 @@
 import uvm_pkg::*;
 `include "uvm_macros.svh"
 
-
+`include "interface.sv"
 `include "sequenceItem.sv"
 `include "sequence.sv"
 `include "sequencer.sv"
 `include "driver.sv"
+`include "monitor.sv"
 `include "agent.sv"
 `include "environment.sv"
 `include "test.sv"
-`include "monitor.sv"
 //`include "scoreboard.sv"
 
 
 module top;
-    `define PERIOD 10
+    int halfPeriod = 5;
 
     logic clk;
+    logic rst;
+    virtual intf vif;
 
     //interface and dut instantiation go here
     
     initial begin
-        uvm_config_db #(interface or something)::set(null, "*", "vif", intf);
+        uvm_config_db #(vif)::set(null, "*", "vif", intf);
     end
     
     initial begin
@@ -31,9 +33,9 @@ module top;
     end
     
     initial begin
-        clock = 0;
+        clk = 0;
         forever begin
-            #PERIOD/2 clock = ~clock;
+            #5 clk = ~clk;
         end
     end
     

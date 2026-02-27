@@ -17,14 +17,14 @@ class coreTest extends uvm_test;
     virtual task run_phase(uvm_phase phase);
         phase.raise_objection(this);
         apply_reset(); //define reset pattern
-        seq.start(e0.a0.s0)l //define this
-        repeat(SOMEAMOUNTOFTIME);
+        seq.start(e0.a0.s0); //define this
+        //repeat(SOMEAMOUNTOFTIME);
         phase.drop_objection(this);
     endtask
 
     virtual task apply_reset();
         //define this later
-        DEFINEMENOW;
+        //DEFINEMENOW;
     endtask
 
 endclass

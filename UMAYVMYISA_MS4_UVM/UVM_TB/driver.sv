@@ -9,9 +9,6 @@ class driver extends uvm_driver #(trace);
 
     virtual function void build_phase (uvm_phase phase);
         super.build_phase (phase);
-        if (!uvm_config_db #(vif)::get(this, "*", "vif" vif)) begin
-            `uvm_fatal(get_type_name(), "Didn't get handle to interface vif");
-        end
     endfunction
 
     virtual task run_phase (uvm_phase phase);
@@ -19,7 +16,7 @@ class driver extends uvm_driver #(trace);
 
         forever begin
             trace testObj;
-            `uvm_info (get_type_name(), $sformatf ("Waiting for data from sequencer", UVM_LOW);
+            `uvm_info (get_type_name(), $sformatf ("Waiting for data from sequencer"), UVM_LOW)
             seq_item_port.get_next_item (testObj);
             drive_item (testObj);
             seq_item_port.item_done();
@@ -28,10 +25,10 @@ class driver extends uvm_driver #(trace);
 
     virtual task drive_item (trace testObj);
         @(posedge vif.clk);
-        vif. <= trace.
-        vif. <= trace.
-        vif. <= trace.
-        vif. <= trace.
+        //vif. <= trace.
+        //vif. <= trace.
+        //vif. <= trace.
+        //vif. <= trace.
     endtask
 
 endclass

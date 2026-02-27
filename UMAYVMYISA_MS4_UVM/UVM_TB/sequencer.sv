@@ -12,7 +12,7 @@ class sequencer extends uvm_sequencer #(trace);
     endfunction
 
     function void connect_phase(uvm_phase phase);
-        super.connect_phae(phase);
+        super.connect_phase(phase);
         `uvm_info("seqr_class", "connect_phase for sequencer", UVM_MEDIUM)
     endfunction
 
