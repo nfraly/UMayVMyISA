@@ -1,4 +1,4 @@
-class driver extends uvm_driver #(trace);
+class driver extends uvm_driver #(trace#(3));
     `uvm_component_utils (driver);
 
     function new (string name = "driver", uvm_component parent = null);
@@ -15,7 +15,7 @@ class driver extends uvm_driver #(trace);
         super.run_phase(phase);
 
         forever begin
-            trace testObj;
+            trace#(3) testObj;
             `uvm_info (get_type_name(), $sformatf ("Waiting for data from sequencer"), UVM_LOW)
             seq_item_port.get_next_item (testObj);
             drive_item (testObj);
@@ -23,7 +23,7 @@ class driver extends uvm_driver #(trace);
         end
     endtask
 
-    virtual task drive_item (trace testObj);
+    virtual task drive_item (trace#(3) testObj);
         @(posedge vif.clk);
         //vif. <= trace.
         //vif. <= trace.

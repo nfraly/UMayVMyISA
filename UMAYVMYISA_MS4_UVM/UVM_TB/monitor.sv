@@ -2,7 +2,7 @@ class monitor extends uvm_monitor;
     `uvm_component_utils (monitor)
 
     virtual intf vif;
-    trace testObj;
+    trace#(3) testObj;
 
     uvm_analysis_port #(trace#(3)) mon_analysis_port;
 

@@ -1,4 +1,4 @@
-class traceItem #(parameter CORES = 3) extends uvm_sequence;
+class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     `uvm_object_utils(traceItem#(3))
     localparam corewidth = $clog2(CORES);
     function new(string name = "traceItem");
@@ -10,7 +10,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence;
 
     int unsigned addr_base;
     int i, c;
-    trace tx;
+    trace#(3) tx;
 
     task body();
         tx = trace#(3)::type_id::create("trace"); 
@@ -25,7 +25,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence;
             addr_base = (c * 16) % (1<<ADDR_W);
 
             for(i = 0; i < 4; i++) begin
-                trace tx = trace::type_id::create("tx");
+                trace#(3) tx = trace::type_id::create("tx");
                 start_item(tx);
                 tx.randomize();
                 tx.core_id = c;
@@ -36,7 +36,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence;
             end
 
             for(i = 0; i < 4; i++) begin
-                trace tx = trace::type_id::create("tx");
+                trace#(3) tx = trace::type_id::create("tx");
                 start_item(tx);
                 tx.randomize();
                 tx.core_id = c;
@@ -56,7 +56,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence;
 endtask
 
 task directedStore(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b0110;
@@ -66,7 +66,7 @@ task directedStore(logic [corewidth-1:0] targetCore);
 endtask
 
 task directedLoad(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b0101;
@@ -77,7 +77,7 @@ endtask
 
 
 task correctStore(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b0110;
@@ -88,7 +88,7 @@ task correctStore(logic [corewidth-1:0] targetCore);
 endtask
 
 task correctLoad(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b0101;
@@ -99,7 +99,7 @@ task correctLoad(logic [corewidth-1:0] targetCore);
 endtask
 
 task directedRightShift(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b0111;
@@ -109,7 +109,7 @@ task directedRightShift(logic [corewidth-1:0] targetCore);
 endtask
 
 task directedLeftShift(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b1000;
@@ -119,7 +119,7 @@ task directedLeftShift(logic [corewidth-1:0] targetCore);
 endtask
 
 task directedSpecialFunction1(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b1001;
@@ -129,7 +129,7 @@ task directedSpecialFunction1(logic [corewidth-1:0] targetCore);
 endtask
 
 task directedSpecialFunction2(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b1010;
@@ -139,7 +139,7 @@ task directedSpecialFunction2(logic [corewidth-1:0] targetCore);
 endtask
 
 task directedSpecialFunction3(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b1011;
@@ -149,7 +149,7 @@ task directedSpecialFunction3(logic [corewidth-1:0] targetCore);
 endtask
 
 task directedSpecialFunction4(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b1100;
@@ -159,7 +159,7 @@ task directedSpecialFunction4(logic [corewidth-1:0] targetCore);
 endtask
 
 task directedSpecialFunction5(logic [corewidth-1:0] targetCore);
-    trace tx = trace#(3)::type_id::create("tx");
+    trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
     tx.randomize();
     tx.instruction[31:28] = 4'b1101;

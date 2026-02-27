@@ -1,4 +1,4 @@
-class sequencer extends uvm_sequencer #(trace);
+class sequencer extends uvm_sequencer #(trace#(3));
 
     `uvm_component_utils(sequencer)
 
