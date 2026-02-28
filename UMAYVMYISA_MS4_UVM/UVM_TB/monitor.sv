@@ -25,8 +25,8 @@ class monitor extends uvm_monitor;
         testObj = trace#(3)::type_id::create("testObj");
         forever begin
             @(posedge vif.clk); //whatever signifies a new event
-            //testobj.inmembers = vif.inmembers; //grab the input for the DUT
-            //testobj.outmembers = vif.outmembers; //grab the DUT output
+            testobj.instruction = vif.instruction; //grab the input for the DUT
+            //testobj.outmembers = vif.outmembers; //grab the DUT output -- none right now
 
             mon_analysis_port.write(testObj);
         end

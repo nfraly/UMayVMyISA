@@ -13,13 +13,10 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     trace#(3) tx;
 
     task body();
-        tx = trace#(3)::type_id::create("trace"); 
+    tx = trace#(3)::type_id::create("trace"); 
     start_item(tx);
     tx.randomize();
-    directedStore(tx.targetCore);
-    directedLoad(tx.targetCore);
-    directedShiftRight(tx.targetCore);
-    directedShiftLeft(tx.targetCore);   
+    directedTestCases();
     finish_item(tx);
 /*        for (c = 0; c < int`(N); c++) begin
             addr_base = (c * 16) % (1<<ADDR_W);
@@ -53,6 +50,22 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
 
 
 
+endtask
+
+task directedTestCases();
+    for(logic [corewidth-1:0]  j = 0; j < CORES; j++) begin
+        directedStore(j);
+        directedLoad(j);
+        correctStore(j);
+        correctLoad(j);
+        directedRightShift(j);
+        directedLeftShift(j);
+        directedSpecialFunction1(j);
+        directedSpecialFunction2(j);
+        directedSpecialFunction3(j);
+        directedSpecialFunction4(j);
+        directedSpecialFunction5(j);
+    end
 endtask
 
 task directedStore(logic [corewidth-1:0] targetCore);

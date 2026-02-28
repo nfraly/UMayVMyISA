@@ -23,8 +23,7 @@ class coreTest extends uvm_test;
     endtask
 
     virtual task apply_reset();
-        //define this later
-        //DEFINEMENOW;
+        vif.rst = 1;
     endtask
 
 endclass

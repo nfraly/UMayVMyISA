@@ -25,10 +25,8 @@ class driver extends uvm_driver #(trace#(3));
 
     virtual task drive_item (trace#(3) testObj);
         @(posedge vif.clk);
-        //vif. <= trace.
-        //vif. <= trace.
-        //vif. <= trace.
-        //vif. <= trace.
+        vif.targetCore <= testObj.targetCore;
+        vif.instruction <= testObj.instruction;
     endtask
 
 endclass
