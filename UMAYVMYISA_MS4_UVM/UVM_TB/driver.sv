@@ -25,8 +25,20 @@ class driver extends uvm_driver #(trace#(3));
 
     virtual task drive_item (trace#(3) testObj);
         @(posedge vif.clk);
-        vif.targetCore <= testObj.targetCore;
-        vif.instruction <= testObj.instruction;
+        if (vif.instr_ready) begin
+            vif.targetCore <= testObj.targetCore;
+            vif.instr_word <= testObj.instruction;
+            vif.instr_valid <= '1;
+            repeat(5) @(negedge vif.clk);
+            //if it's a load
+            testObj.register <= vif.;
+            testObj.address <= vif.mem_dbg_addr;
+            testObj.data <= vif.mem_dbg_data;
+            //if it's a store
+            testObj.register <= vif.;
+            testObj.address <= vif.;
+            testObj.data <= vif.;
+            //other alu stuff later
     endtask
 
 endclass
