@@ -1,5 +1,3 @@
-// memory.sv
-// Byte addressable 2KB memory model 
 import system_widths_pkg::*;
 
 module memory (
@@ -27,25 +25,24 @@ module memory (
   // 1 cycle response for Loads/Stores
   always_ff @(posedge clk or negedge resetN) begin
     if (!resetN) begin
-      // Clear memory on reset
-      for (int i = 0; i < DEPTH; ++i) memory_size[i] <= '0;
+      $readmemh("init_memory", memory_size);
       resp_data_r <= '0;
       resp_valid_r <= 0;
     end
     else begin 
       resp_valid_r <= 0;
       if (mem_if.mem_req_valid && mem_if.mem_req_ready) begin
-	    if (!mem_if.mem_req_we) begin
-	      // Load Branch 
-	      resp_data_r <= memory_size[mem_if.mem_req_addr];
-	      resp_valid_r <= 1;
-	    end
-	    else begin
- 	      memory_size[mem_if.mem_req_addr] <= mem_if.mem_req_write;
+	      if (!mem_if.mem_req_we) begin
+	        // Load Branch 
+	        resp_data_r <= memory_size[mem_if.mem_req_addr];
+	        resp_valid_r <= 1;
+	      end
+	      else begin
+ 	        memory_size[mem_if.mem_req_addr] <= mem_if.mem_req_write;
    	      // Store Branch
-	      resp_data_r <= '0;	// Don't care for stores
-	      resp_valid_r <= 1;
-	    end
+	        resp_data_r <= '0;	// Don't care for stores
+	        resp_valid_r <= 1;
+	      end
       end
     end
   end

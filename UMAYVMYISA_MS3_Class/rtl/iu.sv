@@ -4,13 +4,21 @@
 * Handles one 32 bit instruction at a time. Decodes the opcode
 * and register fields and executes either 
 *   NOP, ALU op, LDR/STR, or Reserved
+*
+*
+* I-type instruction breakdown
+*   opcode[31:28] rt[27:23] reserved[22:11] address[10:0]
+*   LDR -> rt is destination reg
+*   STR -> rt is source
+*
+* R-type instruction breakdown
+*   opcode[31:28] rt[27:23] ra[22:18] rb[17:13] reserved[12:0]
 * 
 * Regfile interface
 *   Drives read addresses for opernds and performs writeback on done
 *
 * Memory interface (iu_miu_if.iu)
 *    Asserts mem_req for LDR/STR and waits for mem_done
-* 32 bit instruction, parameterized core, 32 bit width instruction, clk, rst, 
 */
 import system_widths_pkg::*;
 import opcode_pkg::*;
@@ -62,6 +70,7 @@ module instruction_unit (
   logic wb_valid_r;
   logic [4:0] wb_addr_r;
   logic [31:0] wb_data_r;
+  logic [7:0] store_data_r;
 
   // Used to track if we need to assert illegal op flag on done
   logic illegal_pending_r;
@@ -145,6 +154,7 @@ module instruction_unit (
       wb_valid_r <= 1'b0;
       wb_addr_r <= 5'd0;
       wb_data_r <= 32'h0;
+      store_data_r <= 8'h00;
 
       illegal_pending_r <= 1'b0;
 
@@ -176,14 +186,13 @@ module instruction_unit (
               illegal_pending_r <= 1'b1;
               state <= DONE;
             end 
-	    else if (is_mem_op(op)) begin
-              miu.mem_we <= (op == STR);
-              miu.mem_addr <= instr_in[ADDR_W-1:0];
-              miu.mem_write <= rf_data_a[7:0];
+	          else if (is_mem_op(op)) begin
+              // Need to latch here so mem_write stays stable in ISSUE_MEM/WAIT_MEM states
+              store_data_r <= rf_data_a[7:0];
               state <= ISSUE_MEM;
             end 
-	    else if (is_alu_op(op)) state <= ISSUE_ALU;
-	    else begin
+	          else if (is_alu_op(op)) state <= ISSUE_ALU;
+	          else begin
               // Treat any other input as illegal
               illegal_pending_r <= 1'b1;
               state <= DONE;
@@ -192,20 +201,29 @@ module instruction_unit (
         end
 
         ISSUE_MEM: begin
+          miu.mem_we <= (op_r == STR);
+          miu.mem_addr <= addr_r;
+          miu.mem_write <= store_data_r;
           miu.mem_req <= 1'b1;
           state <= WAIT_MEM;
         end
 
         WAIT_MEM: begin
-	  miu.mem_req <= 1'b1;		// added to test
+		      miu.mem_we <= (op_r == STR);
+		      miu.mem_addr <= addr_r;
+		      miu.mem_write <= store_data_r;
+		      miu.mem_req <= 1'b1;
+
           if (miu.mem_done) begin
-	    miu.mem_req <= 1'b0;	 // added to test
+		        miu.mem_req <= 1'b0;	  
+
             if (op_r == LDR) begin
               wb_valid_r <= 1'b1;
               wb_addr_r <= rt_r;
-	      // Zero pad upper mem_read bits
+	            // Zero pad upper mem_read bits
               wb_data_r <= {24'h0, miu.mem_read};
             end
+
             state <= DONE;
           end
         end
