@@ -9,10 +9,10 @@ import uvm_pkg::*;
 `include "sequencer.sv"
 `include "driver.sv"
 `include "monitor.sv"
+`include "scoreboard.sv"
 `include "agent.sv"
 `include "environment.sv"
 `include "test.sv"
-`include "scoreboard.sv"
 
 
 module top;

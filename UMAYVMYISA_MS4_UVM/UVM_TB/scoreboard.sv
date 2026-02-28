@@ -4,7 +4,7 @@ class scoreboard extends uvm_test;
 
     uvm_analysis_imp #(trace#(3), scoreboard) scb_port;
 
-    trace transactions[$];
+    trace#(3) transactions[$];
 
     function new(string name = "scoreboard", uvm_component parent);
         super.new(name, parent);
@@ -22,7 +22,7 @@ class scoreboard extends uvm_test;
         `uvm_info("SCB_CLASS", "Connect Phase", UVM_MEDIUM)
     endfunction
 
-    function void write(trace item);
+    function void write(trace#(3) item);
         transactions.push_back(item);
     endfunction
 
@@ -32,7 +32,7 @@ class scoreboard extends uvm_test;
 
         forever begin
 
-            trace curr_trans;
+            trace#(3) curr_trans;
             wait((transactions.size() != 0));
             curr_trans = transactions.pop_front();
     //        compare(curr_trans); // checker 
