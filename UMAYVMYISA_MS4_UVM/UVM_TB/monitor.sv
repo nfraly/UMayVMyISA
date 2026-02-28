@@ -31,7 +31,7 @@ class monitor extends uvm_monitor;
             repeat(5) @(posedge vif.clk);
             testObj.data <= vif.mem_dbg_data;
             testObj.address <= vif.mem_dbg_addr;
-            testObj.register <= vif.mem_reg_something;
+            testObj.register <= vif.mem_req_addr_dbg;
 
 
             mon_analysis_port.write(testObj);

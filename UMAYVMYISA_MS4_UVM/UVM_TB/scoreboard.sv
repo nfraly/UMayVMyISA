@@ -32,12 +32,30 @@ class scoreboard extends uvm_test;
 
         forever begin
 
-            trace#(3) curr_trans;
+            trace#(3) testObject;
             wait((transactions.size() != 0));
-            curr_trans = transactions.pop_front();
-    //        compare(curr_trans); // checker 
+            testObject = transactions.pop_front();
+            compare(testObject); // checker 
         end
     endtask
+
+    task compare(trace testObject);
+        logic [7:0] actualAddr;
+        logic [7:0] expectedAddr;
+
+        case(testObject.opcode) 
+            4'b0101: begin //Load 
+               actualAddr = testObject.instr_word[27:23];
+               expectedAddr = testObject.register;
+            end
+            4'b0110: begin //Store
+                actualAddr = testObject.instr_word[27:23];
+                expectedAddr = testObject.register;
+            end
+        endcase
+    endtask
+
+
 
 endclass
 
