@@ -7,6 +7,12 @@ endpackage
 
 import system_widths_pkg::*;
 
+// Instruction interface
+interface instr_if;
+  logic valid, ready;
+  logic [31:0] instr;
+endinterface
+
 // Instruction Unit and Memory Interface Unit
 interface iu_miu_if (input logic clk);
   logic mem_req;		// Request in progress 
@@ -18,12 +24,14 @@ interface iu_miu_if (input logic clk);
   
   // IU drives request fields and write data
   modport iu (
+    input clk,
     output mem_req, mem_we, mem_addr, mem_write,
     input mem_read, mem_done
   );
 
   // MIU accepts request, returns read data and completion
   modport miu (
+    input clk,
     input mem_req, mem_we, mem_addr, mem_write,
     output mem_read, mem_done
   );

@@ -52,7 +52,7 @@ module mem_arbiter #(parameter int N = 3) (
   assign rr_bus.req = req_valid;
   assign grant_signal = rr_bus.grant;
 
-  rr_arbiter rr(rr_bus);
+  rr_arbiter #(.N(N)) rr(rr_bus);
 
   // Lock grant to specific core
   // busy = 0 -> can accept new request 
@@ -67,7 +67,7 @@ module mem_arbiter #(parameter int N = 3) (
     for (int i = 0; i < N; ++i) begin
       if (one_hot[i]) begin
         onehot_to_index = i[$clog2(N)-1:0];
-	break;
+	      break;
       end
     end
   endfunction

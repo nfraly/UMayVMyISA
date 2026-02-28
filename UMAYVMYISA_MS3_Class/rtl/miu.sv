@@ -21,6 +21,7 @@ module miu (
   logic we_r;
   logic [ADDR_W-1:0] addr_r;
   logic [7:0] wdata_r;
+  logic req_holdoff_r;
 
   always_ff @(posedge clk or negedge resetN) begin
     // On reset, start idle with no current requests and responses
@@ -30,6 +31,7 @@ module miu (
       we_r <= 1'b0;
       addr_r <= '0;
       wdata_r <= '0;
+      req_holdoff_r <= 1'b0;
 
       iu_if.mem_done <= 1'b0;
       iu_if.mem_read <= '0;
@@ -47,11 +49,20 @@ module miu (
         IDLE: begin
           cache_if.cache_req_valid <= 1'b0;
 
-          if (iu_if.mem_req) begin
+          // Allows a. new request only after mem_req goes low
+          if (!iu_if.mem_req) req_holdoff_r <= 1'b0;
+
+          // Accept only fully-known requests. 
+          // Otherwise LDR/STR can sample X 
+          if (iu_if.mem_req && !req_holdoff_r &&
+              ((iu_if.mem_we === 1'b0) || (iu_if.mem_we === 1'b1)) &&
+              (^iu_if.mem_addr !== 1'bx) &&
+              (^iu_if.mem_write !== 1'bx)) begin
             // Save IU request
             we_r <= iu_if.mem_we;
             addr_r <= iu_if.mem_addr;
             wdata_r <= iu_if.mem_write;
+            req_holdoff_r <= 1'b1;
 
             // Drive cache request fields from IU vals
             cache_if.cache_req_we <= iu_if.mem_we;
