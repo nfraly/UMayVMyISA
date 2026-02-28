@@ -24,9 +24,15 @@ class monitor extends uvm_monitor;
         super.run_phase(phase);
         testObj = trace#(3)::type_id::create("testObj");
         forever begin
-            @(posedge vif.clk); //whatever signifies a new event
-            testobj.instruction = vif.instruction; //grab the input for the DUT
+            @(posedge vif.instr_ready); //processor ready for a new instruction
+            testObj.instruction = vif.instruction; //grab the input for the DUT
+            testObj.targetCore = vif.targetCore;
             //testobj.outmembers = vif.outmembers; //grab the DUT output -- none right now
+            repeat(5) @(posedge vif.clk);
+            testObj.data <= vif.mem_dbg_data;
+            testObj.address <= vif.mem_dbg_addr;
+            testObj.register <= vif.mem_reg_something;
+
 
             mon_analysis_port.write(testObj);
         end
