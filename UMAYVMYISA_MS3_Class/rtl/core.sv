@@ -10,7 +10,17 @@ module core #(
   input logic clk,
   input logic resetN,
   iu_miu_if.iu miu_if,
-  instr_if instr_in_if
+  instr_if instr_in_if,
+
+  // Debug visibility
+  output logic [31:0] dbg_alu_result,
+  output logic [4:0]  dbg_rf_raddr_a,
+  output logic [4:0]  dbg_rf_raddr_b,
+  output logic [31:0] dbg_rf_rdata_a,
+  output logic [31:0] dbg_rf_rdata_b,
+  output logic        dbg_rf_wen,
+  output logic [4:0]  dbg_rf_waddr,
+  output logic [31:0] dbg_rf_wdata
 );
 
   // Used to hold instructions
@@ -50,6 +60,16 @@ module core #(
   assign instr_in    = instr_in_if.instr;
   assign instr_valid = instr_in_if.valid && instr_in_if.ready;
   //assign instr_valid = instr_in_if.valid && instr_in_if.ready;
+
+  // Export key ALU/regfile debug signals
+  assign dbg_alu_result = alu_result;
+  assign dbg_rf_raddr_a = rf_addr_a;
+  assign dbg_rf_raddr_b = rf_addr_b;
+  assign dbg_rf_rdata_a = rf_data_a;
+  assign dbg_rf_rdata_b = rf_data_b;
+  assign dbg_rf_wen     = rf_wen;
+  assign dbg_rf_waddr   = rf_write_addr;
+  assign dbg_rf_wdata   = rf_write_data;
 
 // Comment out for testing
   // Increment pc when instruction finishes
