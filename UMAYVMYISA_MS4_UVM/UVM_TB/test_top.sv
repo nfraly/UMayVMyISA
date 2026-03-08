@@ -50,7 +50,7 @@ module top;
         .core_cache_req_addr_dbg(vif.core_cache_req_addr_dbg),
         .core_cache_req_wdata_dbg(vif.core_cache_req_wdata_dbg),
         .mem_req_valid_dbg(vif.mem_req_valid_dbg),
-        .mem_req_ready_dbg(vif.mem_req_valid_dbg),
+        .mem_req_ready_dbg(vif.mem_req_ready_dbg),
         .mem_req_we_dbg(vif.mem_req_we_dbg),
         .mem_req_addr_dbg(vif.mem_req_addr_dbg),
         .mem_req_wdata_dbg(vif.mem_req_wdata_dbg),

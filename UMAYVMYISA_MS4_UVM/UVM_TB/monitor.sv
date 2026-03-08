@@ -35,7 +35,7 @@ class monitor extends uvm_monitor;
         testObj = trace#(3)::type_id::create("testObj");
         forever begin
             @(posedge vif.instr_ready); //processor ready for a new instruction
-            testObj.instruction = vif.instruction; //grab the input for the DUT
+            testObj.instruction = vif.instr_word; //grab the input for the DUT
             testObj.targetCore = vif.targetCore;
             //testobj.outmembers = vif.outmembers; //grab the DUT output -- none right now
             repeat(5) @(posedge vif.clk);

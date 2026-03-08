@@ -15,6 +15,7 @@ interface intf(input bit clk, rst);
     logic [CORES-1:0][4:0] core_rf_raddr_a_dbg;
     logic [CORES-1:0][4:0] core_rf_raddr_b_dbg;
     logic [CORES-1:0][31:0] core_rf_rdata_a_dbg;
+    logic [CORES-1:0][31:0] core_rf_rdata_b_dbg;
     logic [CORES-1:0] core_rf_wen_dbg;
     logic [CORES-1:0][4:0] core_rf_waddr_dbg;
     logic [CORES-1:0][31:0] core_rf_wdata_dbg;
@@ -23,6 +24,7 @@ interface intf(input bit clk, rst);
     logic [CORES-1:0][ADDR_W-1:0] core_iu_mem_addr_dbg;
     logic [CORES-1:0][7:0] core_iu_mem_wdata_dbg;
     logic [CORES-1:0] core_iu_mem_done_req;
+    logic [CORES-1:0] core_iu_mem_done_dbg;
     logic [CORES-1:0][7:0] core_iu_mem_rdata_dbg;
 
     logic [CORES-1:0] core_cache_req_valid_dbg;
