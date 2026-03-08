@@ -43,16 +43,22 @@ class scoreboard extends uvm_test;
         logic [7:0] actualAddr;
         logic [7:0] expectedAddr;
 
-        case(testObject.opcode) 
+        case(testObject.opCode) 
             4'b0101: begin //Load 
-               actualAddr = testObject.instr_word[27:23];
+               actualAddr = testObject.instruction[27:23];
                expectedAddr = testObject.register;
             end
             4'b0110: begin //Store
-                actualAddr = testObject.instr_word[27:23];
+                actualAddr = testObject.instruction[27:23];
                 expectedAddr = testObject.register;
             end
         endcase
+        if (actualAddr != expectedAddr) begin
+            `uvm_error("Compare", $sformatf("Transaction failed! Actual %b expected %b", actualAddr, expectedAddr))
+        end
+        else begin
+            `uvm_info("Compare", "Transaction passed", UVM_HIGH)
+        end
     endtask
 
 

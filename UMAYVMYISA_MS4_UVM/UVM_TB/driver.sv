@@ -1,21 +1,29 @@
 class driver extends uvm_driver #(trace#(3));
     `uvm_component_utils (driver);
 
+    virtual intf vif;
+    //sequenceitem
+
+
     function new (string name = "driver", uvm_component parent = null);
         super.new (name, parent);
     endfunction
 
-    virtual intf vif;
 
-    virtual function void build_phase (uvm_phase phase);
+    function void build_phase (uvm_phase phase);
         super.build_phase (phase);
     endfunction
 
-    virtual task run_phase (uvm_phase phase);
+    function void connect_phase(uvm_phase phase);
+        super.connect_phase(phase);
+    endfunction
+
+    task run_phase (uvm_phase phase);
         super.run_phase(phase);
 
         forever begin
             trace#(3) testObj;
+            testObj = trace#(3)::type_id::create(testObj);
             `uvm_info (get_type_name(), $sformatf ("Waiting for data from sequencer"), UVM_LOW)
             seq_item_port.get_next_item (testObj);
             drive_item (testObj);
@@ -23,7 +31,7 @@ class driver extends uvm_driver #(trace#(3));
         end
     endtask
 
-    virtual task drive_item (trace#(3) testObj);
+    task drive_item (trace#(3) testObj);
         @(posedge vif.clk);
         if (vif.instr_ready) begin
             vif.targetCore <= testObj.targetCore;
