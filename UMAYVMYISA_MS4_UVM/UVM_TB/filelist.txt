@@ -6,6 +6,11 @@
 ../rtl/miu.sv
 ../rtl/mp_system.sv
 ../rtl/opcode_pkg.sv
+../rtl/mp_top.sv
+../rtl/core.sv
+../rtl/regfile.sv
+../rtl/alu.sv
+../rtl/iu.sv
 
 +incdir+../rtl/alu/
 ../rtl/alu/ece593w26_mul.sv

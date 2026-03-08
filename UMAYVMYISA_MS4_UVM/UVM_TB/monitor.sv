@@ -8,11 +8,16 @@ class monitor extends uvm_monitor;
 
     function new (string name = "monitor", uvm_component parent = null);
         super.new(name, parent);
+        `uvm_info("Monitor",  "Inside contstructor", UVM_HIGH)
     endfunction
 
     virtual function void build_phase (uvm_phase phase);
         super.build_phase(phase);
         mon_analysis_port = new("mon_analaysis_port", this);
+
+        if(!(uvm_config_db #(virtual intf)::get(this, "*", "vif", vif))) begin
+            `uvm_error("Monitor", "Failed to get VIF from config DB")
+        end
     endfunction
 
     function void connect_phase (uvm_phase phase);
@@ -20,7 +25,12 @@ class monitor extends uvm_monitor;
         `uvm_info("mon_class", "connect_phase monitor", UVM_MEDIUM)
     endfunction
 
-    virtual task run_phase (uvm_phase phase);
+    /*
+        TODO:ALU operations take 5 clock cycles, monitor must grab inputs and then grab the outputs 5 clock cycles later
+    */
+
+
+     task run_phase (uvm_phase phase);
         super.run_phase(phase);
         testObj = trace#(3)::type_id::create("testObj");
         forever begin

@@ -6,17 +6,28 @@ class coreTest extends uvm_test;
     endfunction
 
     env e0;
+    traceItem seq; 
     virtual intf vif;
 
-    virtual function void build_phase(uvm_phase phase);
+    function void build_phase(uvm_phase phase);
         super.build_phase(phase);
 
         e0 = env::type_id::create("e0", this);
     endfunction
 
-    virtual task run_phase(uvm_phase phase);
+    virtual function void end_of_elaboration_phase(uvm_phase phase);
+        super.end_of_elaboration_phase(phase);
+        uvm_top.print_topology();
+    endfunction
+
+    function void connect_phase(uvm_phase phase);
+        super.connect_phase(phase);
+    endfunction
+
+    task run_phase(uvm_phase phase);
         phase.raise_objection(this);
-        apply_reset(); //define reset pattern
+        //apply_reset(); //define reset pattern
+        seq = traceItem#(3)::type_id::create("seq");
         seq.start(e0.a0.s0); //define this
         //repeat(SOMEAMOUNTOFTIME);
         phase.drop_objection(this);
