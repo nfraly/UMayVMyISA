@@ -3,6 +3,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     localparam corewidth = $clog2(CORES);
     function new(string name = "traceItem");
         super.new(name);
+        `uvm_info("SEQ", "Sequence constructor", UVM_HIGH)
     endfunction
 
     

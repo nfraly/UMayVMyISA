@@ -4,6 +4,7 @@ class sequencer extends uvm_sequencer #(trace#(3));
 
     function new(string name="sequencer", uvm_component parent);
         super.new(name, parent);
+        `uvm_info("seqr_class", "Constructor for sequencer", UVM_MEDIUM)
     endfunction
 
     function void build_phase(uvm_phase phase);

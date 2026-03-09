@@ -8,21 +8,22 @@ class monitor extends uvm_monitor;
 
     function new (string name = "monitor", uvm_component parent = null);
         super.new(name, parent);
-        `uvm_info("Monitor",  "Inside contstructor", UVM_HIGH)
+        `uvm_info("MONITOR",  "Monitor Constructor", UVM_HIGH)
     endfunction
 
     virtual function void build_phase (uvm_phase phase);
         super.build_phase(phase);
+        `uvm_info("MONITOR", "Monitor build phase", UVM_HIGH)
         mon_analysis_port = new("mon_analaysis_port", this);
 
         if(!(uvm_config_db #(virtual intf)::get(this, "*", "vif", vif))) begin
-            `uvm_error("Monitor", "Failed to get VIF from config DB")
+            `uvm_error("MONITOR", "Failed to get VIF from config DB")
         end
     endfunction
 
     function void connect_phase (uvm_phase phase);
         super.connect_phase(phase);
-        `uvm_info("mon_class", "connect_phase monitor", UVM_MEDIUM)
+        `uvm_info("MONITOR", "Monitor connect phase", UVM_MEDIUM)
     endfunction
 
     /*
@@ -32,6 +33,7 @@ class monitor extends uvm_monitor;
 
      task run_phase (uvm_phase phase);
         super.run_phase(phase);
+        `uvm_info("MONITOR", "Monitor run phase", UVM_HIGH)
         testObj = trace#(3)::type_id::create("testObj");
         forever begin
             @(posedge vif.instr_ready); //processor ready for a new instruction

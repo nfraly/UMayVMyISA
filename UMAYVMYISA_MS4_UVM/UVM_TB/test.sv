@@ -3,6 +3,7 @@ class coreTest extends uvm_test;
 
     function new(string name = "coreTest", uvm_component parent=null);
         super.new(name, parent);
+        `uvm_info("TEST", "Test build phase", UVM_HIGH)
     endfunction
 
     env e0;
@@ -11,6 +12,7 @@ class coreTest extends uvm_test;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
+        `uvm_info("TEST", "Test build phase", UVM_HIGH)
 
         e0 = env::type_id::create("e0", this);
     endfunction
@@ -22,10 +24,12 @@ class coreTest extends uvm_test;
 
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
+        `uvm_info("TEST", "Test connect phase", UVM_HIGH)
     endfunction
 
     task run_phase(uvm_phase phase);
         super.run_phase(phase);
+        `uvm_info("TEST", "Test run phase", UVM_HIGH)
         phase.raise_objection(this);
         //apply_reset(); //define reset pattern
         seq = traceItem#(3)::type_id::create("seq");
