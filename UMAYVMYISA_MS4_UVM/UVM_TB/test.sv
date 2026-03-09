@@ -25,6 +25,7 @@ class coreTest extends uvm_test;
     endfunction
 
     task run_phase(uvm_phase phase);
+        super.run_phase(phase);
         phase.raise_objection(this);
         //apply_reset(); //define reset pattern
         seq = traceItem#(3)::type_id::create("seq");

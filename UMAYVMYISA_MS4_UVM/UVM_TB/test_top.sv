@@ -18,8 +18,8 @@ import uvm_pkg::*;
 module top;
     int halfPeriod = 5;
 
-    logic clk;
-    logic rst;
+
+    bit clk, rst;
     intf vif (clk, rst);
 
     
@@ -62,16 +62,15 @@ module top;
 
     //interface and dut instantiation go here
     
-    initial begin
-        uvm_config_db #(virtual intf)::set(null, "*", "vif", vif);
-    end
     
     initial begin
-        run_test("");
-    end
-    
-    initial begin
+        rst = 1;
         clk = 0;
+        uvm_config_db #(virtual intf)::set(null, "*", "vif", vif);
+        run_test("coreTest");
+    end
+    
+    initial begin
         forever begin
             #5 clk = ~clk;
         end
