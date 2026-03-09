@@ -15,7 +15,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     task body();
     tx = trace#(3)::type_id::create("trace"); 
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     directedTestCases();
     finish_item(tx);
 /*        for (c = 0; c < int`(N); c++) begin
@@ -24,7 +24,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
             for(i = 0; i < 4; i++) begin
                 trace#(3) tx = trace::type_id::create("tx");
                 start_item(tx);
-                tx.randomize();
+                assert(tx.randomize());
                 tx.core_id = c;
                 tx.we = 1'b1;
                 tx.addr = logic`(addr_base + i);
@@ -35,7 +35,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
             for(i = 0; i < 4; i++) begin
                 trace#(3) tx = trace::type_id::create("tx");
                 start_item(tx);
-                tx.randomize();
+                assert(tx.randomize());
                 tx.core_id = c;
                 tx.we = 1'b0;
                 tx.addr = logic`(addr_base + i);
@@ -71,7 +71,7 @@ endtask
 task directedStore(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b0110;
     tx.targetCore = targetCore;
     `uvm_info("SEQ", $sformatf("Generated a directed Store test to core %d", targetCore), UVM_LOW)
@@ -81,7 +81,7 @@ endtask
 task directedLoad(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b0101;
     tx.targetCore = targetCore;
     `uvm_info("SEQ", $sformatf("Generated a directed Load test to core %d", targetCore), UVM_LOW)
@@ -92,7 +92,7 @@ endtask
 task correctStore(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b0110;
     tx.instruction[10:0] = 11'b000011010; //arbitrary memory destination
     tx.targetCore = targetCore;
@@ -103,7 +103,7 @@ endtask
 task correctLoad(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b0101;
     tx.instruction[10:0] = 11'b000011010; // Load from memory address that was previously stored to
     tx.targetCore = targetCore;
@@ -114,7 +114,7 @@ endtask
 task directedRightShift(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b0111;
     tx.targetCore = targetCore;
     `uvm_info("SEQ", $sformatf("Generated a directed Righ Shift test to core %d", targetCore), UVM_LOW)
@@ -124,7 +124,7 @@ endtask
 task directedLeftShift(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b1000;
     tx.targetCore = targetCore;
     `uvm_info("SEQ", $sformatf("Generated a directed Left Shit test to core %d", targetCore), UVM_LOW)
@@ -134,7 +134,7 @@ endtask
 task directedSpecialFunction1(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b1001;
     tx.targetCore = targetCore;
     `uvm_info("SEQ", $sformatf("Generated a directed Special Function1 test to core %d", targetCore), UVM_LOW)
@@ -144,7 +144,7 @@ endtask
 task directedSpecialFunction2(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b1010;
     tx.targetCore = targetCore;
     `uvm_info("SEQ", $sformatf("Generated a directed Special Function2 test to core %d", targetCore), UVM_LOW)
@@ -154,7 +154,7 @@ endtask
 task directedSpecialFunction3(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b1011;
     tx.targetCore = targetCore;
     `uvm_info("SEQ", $sformatf("Generated a directed Special Function3 test to core %d", targetCore), UVM_LOW)
@@ -164,7 +164,7 @@ endtask
 task directedSpecialFunction4(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b1100;
     tx.targetCore = targetCore;
     `uvm_info("SEQ", $sformatf("Generated a directed Special Function4 test to core %d", targetCore), UVM_LOW)
@@ -174,7 +174,7 @@ endtask
 task directedSpecialFunction5(logic [corewidth-1:0] targetCore);
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    tx.randomize();
+    assert(tx.randomize());
     tx.instruction[31:28] = 4'b1101;
     tx.targetCore = targetCore;
     `uvm_info("SEQ", $sformatf("Generated a directed Special Function5 test to core %d", targetCore), UVM_LOW)

@@ -20,19 +20,19 @@ module top;
 
 
     bit clk, rst;
-    intf vif (clk, rst);
+    intf vif (clk);
 
     
     mp_top #(3) DUT (
         .clk(clk),
-        .resetN(resetN),
+        .resetN(~vif.rst),
         .instr_valid(vif.instr_valid),
         .instr_word(vif.instr_word),
         .instr_core_sel(vif.instr_core_sel),
         .instr_ready(vif.instr_ready),
         .core_ready_vec(vif.core_ready_vec),
-        .core_alu_result_dbg(core_alu_result_dbg),
-        .core_rf_raddr_a_dbg(core_rf_raddr_a_dbg),
+        .core_alu_result_dbg(vif.core_alu_result_dbg),
+        .core_rf_raddr_a_dbg(vif.core_rf_raddr_a_dbg),
         .core_rf_raddr_b_dbg(vif.core_rf_raddr_b_dbg),
         .core_rf_rdata_a_dbg(vif.core_rf_rdata_a_dbg),
         .core_rf_rdata_b_dbg(vif.core_rf_rdata_b_dbg),
@@ -57,7 +57,7 @@ module top;
         .mem_resp_valid_dbg(vif.mem_resp_valid_dbg),
         .mem_resp_data_dbg(vif.mem_resp_data_dbg),
         .mem_dbg_addr(vif.mem_dbg_addr),
-        .mem_dbg_data(mem_dbg_data));
+        .mem_dbg_data(vif.mem_dbg_data));
 
 
     //interface and dut instantiation go here

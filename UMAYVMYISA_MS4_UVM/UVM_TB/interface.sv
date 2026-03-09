@@ -1,9 +1,9 @@
-interface intf(input bit clk, rst);
+interface intf(input bit clk);
     parameter CORES = 3;
-    parameter ADDR_W = 32;
+    parameter ADDR_W = 11;
     localparam corewidth = $clog2(CORES);
-   // logic [31:0] instruction;
     logic [corewidth-1:0] targetCore;
+    logic rst;
 
     logic instr_valid;
     logic [31:0] instr_word;

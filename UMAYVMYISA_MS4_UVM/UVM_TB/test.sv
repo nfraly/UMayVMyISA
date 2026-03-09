@@ -6,7 +6,7 @@ class coreTest extends uvm_test;
     endfunction
 
     env e0;
-    traceItem seq; 
+    traceItem#(3) seq; 
     virtual intf vif;
 
     function void build_phase(uvm_phase phase);

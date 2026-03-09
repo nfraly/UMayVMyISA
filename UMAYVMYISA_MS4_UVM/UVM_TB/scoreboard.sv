@@ -39,7 +39,7 @@ class scoreboard extends uvm_test;
         end
     endtask
 
-    task compare(trace testObject);
+    task compare(trace#(3) testObject);
         logic [7:0] actualAddr;
         logic [7:0] expectedAddr;
 
