@@ -3,6 +3,8 @@ class driver extends uvm_driver #(trace#(3));
 
     virtual intf vif;
     //sequenceitem
+    trace#(3) testObj;
+
 
 
     function new (string name = "driver", uvm_component parent = null);
@@ -12,6 +14,9 @@ class driver extends uvm_driver #(trace#(3));
 
     function void build_phase (uvm_phase phase);
         super.build_phase (phase);
+        if(!(uvm_config_db #(virtual intf)::get(this, "*", "vif", vif))) begin
+            `uvm_error("driver", "Failed to get VIF from config DB")
+        end
     endfunction
 
     function void connect_phase(uvm_phase phase);
@@ -22,9 +27,8 @@ class driver extends uvm_driver #(trace#(3));
         super.run_phase(phase);
 
         forever begin
-            trace#(3) testObj;
-            testObj = trace#(3)::type_id::create(testObj);
-            `uvm_info (get_type_name(), $sformatf ("Waiting for data from sequencer"), UVM_LOW)
+            testObj = trace#(3)::type_id::create("testObj");
+            //`uvm_info (get_type_name(), $sformatf ("Waiting for data from sequencer"), UVM_LOW)
             seq_item_port.get_next_item (testObj);
             drive_item (testObj);
             seq_item_port.item_done();
