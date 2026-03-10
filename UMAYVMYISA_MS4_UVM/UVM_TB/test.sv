@@ -3,7 +3,7 @@ class coreTest extends uvm_test;
 
     function new(string name = "coreTest", uvm_component parent=null);
         super.new(name, parent);
-        `uvm_info("TEST", "Test build phase", UVM_HIGH)
+        `uvm_info("TEST", "Test Constructor", UVM_HIGH)
     endfunction
 
     env e0;

@@ -35,6 +35,7 @@ class scoreboard extends uvm_test;
             trace#(3) testObject;
             wait((transactions.size() != 0));
             testObject = transactions.pop_front();
+            `uvm_info("SCB_CLASS", "Grabbing tx from Monitor", UVM_HIGH)
             compare(testObject); // checker 
         end
     endtask
