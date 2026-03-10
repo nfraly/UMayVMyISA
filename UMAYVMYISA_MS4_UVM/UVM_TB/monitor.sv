@@ -26,9 +26,6 @@ class monitor extends uvm_monitor;
         `uvm_info("MONITOR", "Monitor connect phase", UVM_MEDIUM)
     endfunction
 
-    /*
-        TODO:ALU operations take 5 clock cycles, monitor must grab inputs and then grab the outputs 5 clock cycles later
-    */
 
 
      task run_phase (uvm_phase phase);
@@ -36,15 +33,36 @@ class monitor extends uvm_monitor;
         `uvm_info("MONITOR", "Monitor run phase", UVM_HIGH)
         testObj = trace#(3)::type_id::create("testObj");
         forever begin
-            @(posedge vif.instr_ready); //processor ready for a new instruction
-            testObj.instruction = vif.instr_word; //grab the input for the DUT
-            testObj.targetCore = vif.targetCore;
-            //testobj.outmembers = vif.outmembers; //grab the DUT output -- none right now
-            repeat(5) @(posedge vif.clk);
-            testObj.data <= vif.mem_dbg_data;
-            testObj.address <= vif.mem_dbg_addr;
-            testObj.register <= vif.mem_req_addr_dbg;
-
+            while(!(vif.instr_ready)) @(posedge vif.clk);
+            case(vif.instr_word[31:28])
+                (ADD),
+                (AND),
+                (SUB),
+                (MUL),
+                (SHR),
+                (SHL),
+                (SP1),
+                (SP2),
+                (SP3),
+                (SP4),
+                (SP5): begin
+                    repeat (6) @(posedge vif.clk);
+                    testObj.opcode <= vif.instr_word[31:28];
+                    testObj.aluA <= vif.core_rf_rdata_a_dbg;
+                    testObj.aluB <= vif.core_rf_rdata_b_dbg;
+                    testObj.result <= vif.core_alu_result_dbg;
+                end
+                (LD): begin
+                    repeat (11) @(posedge vif.clk);
+                    testObj.memData <= vif.mem_dbg_data;
+                    testObj.address <= vif.mem_dbg_addr;
+                    testObj.register <= vif.mem_req_addr_dbg;
+                end
+                (STR): begin
+                    repeat (12) @(posedge vif.clk);
+                    //TODO
+                end
+            endcase
 
             mon_analysis_port.write(testObj);
         end

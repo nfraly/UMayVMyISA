@@ -1,6 +1,8 @@
 class driver extends uvm_driver #(trace#(3));
     `uvm_component_utils (driver);
 
+    localparam logic [3:0] ADD = 4'b0001;
+
     virtual intf vif;
     //sequenceitem
     trace#(3) testObj;
@@ -41,12 +43,8 @@ class driver extends uvm_driver #(trace#(3));
     endtask
 
     task drive_item (trace#(3) testObj);
-        @(posedge vif.clk);
-        if (vif.instr_ready) begin
-            vif.targetCore <= testObj.targetCore;
-            vif.instr_word <= testObj.instruction;
-            vif.instr_valid <= '1;
-        end
+        while(!(vif.instr_ready)) @(posedge vif.clk);
+        vif.instr_word = testObj.instruction;
     endtask
 
 endclass
