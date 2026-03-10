@@ -30,35 +30,35 @@ class monitor extends uvm_monitor;
 
      task run_phase (uvm_phase phase);
         super.run_phase(phase);
-        `uvm_info("MONITOR", "Monitor run phase", UVM_HIGH)
+        `uvm_info("MONITOR", "Monitor run phase", UVM_MEDIUM)
         testObj = trace#(3)::type_id::create("testObj");
         forever begin
             while(!(vif.instr_ready)) @(posedge vif.clk);
             case(vif.instr_word[31:28])
-                (ADD),
-                (AND),
-                (SUB),
-                (MUL),
-                (SHR),
-                (SHL),
-                (SP1),
-                (SP2),
-                (SP3),
-                (SP4),
-                (SP5): begin
+                (4'b0001),
+                (4'b0010),
+                (4'b0011),
+                (4'b0100),
+                (4'b0111),
+                (4'b1000),
+                (4'b1001),
+                (4'b1010),
+                (4'b1011),
+                (4'b1100),
+                (4'b1101): begin
                     repeat (6) @(posedge vif.clk);
-                    testObj.opcode <= vif.instr_word[31:28];
+                    testObj.opCode <= vif.instr_word[31:28];
                     testObj.aluA <= vif.core_rf_rdata_a_dbg;
                     testObj.aluB <= vif.core_rf_rdata_b_dbg;
                     testObj.result <= vif.core_alu_result_dbg;
                 end
-                (LD): begin
+                (4'b0101): begin
                     repeat (11) @(posedge vif.clk);
                     testObj.memData <= vif.mem_dbg_data;
                     testObj.address <= vif.mem_dbg_addr;
                     testObj.register <= vif.mem_req_addr_dbg;
                 end
-                (STR): begin
+                (4'b0110): begin
                     repeat (12) @(posedge vif.clk);
                     //TODO
                 end

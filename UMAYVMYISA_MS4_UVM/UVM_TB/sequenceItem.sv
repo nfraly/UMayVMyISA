@@ -10,6 +10,7 @@ class trace #(parameter CORES = 3) extends uvm_sequence_item;
     logic [31:0] aluA;
     logic [31:0] aluB;
     logic [31:0] memData;
+    logic [31:0] result;
     //rand logic [ADDR_W-1:0] addr;
     //rand logic [DATA_W-1:0] wdata;
     //rand int unsigned core_id;

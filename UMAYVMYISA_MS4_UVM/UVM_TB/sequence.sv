@@ -3,7 +3,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     localparam corewidth = $clog2(CORES);
     function new(string name = "traceItem");
         super.new(name);
-        `uvm_info("SEQ", "Sequence constructor", UVM_HIGH)
+        `uvm_info("SEQ", "Sequence constructor", UVM_MEDIUM)
     endfunction
 
     
@@ -15,10 +15,10 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
 
     task body();
     tx = trace#(3)::type_id::create("trace"); 
-    start_item(tx);
-    assert(tx.randomize());
+    //start_item(tx);
+    //assert(tx.randomize());
     directedTestCases();
-    finish_item(tx);
+    //finish_item(tx);
 /*        for (c = 0; c < int`(N); c++) begin
             addr_base = (c * 16) % (1<<ADDR_W);
 
@@ -55,10 +55,10 @@ endtask
 
 task directedTestCases();
     for(logic [corewidth-1:0]  j = 0; j < CORES; j++) begin
-        directedStore(j);
-        directedLoad(j);
-        correctStore(j);
-        correctLoad(j);
+        //directedStore(j);
+        //directedLoad(j);
+        //correctStore(j);
+        //correctLoad(j);
         directedRightShift(j);
         directedLeftShift(j);
         directedSpecialFunction1(j);

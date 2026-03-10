@@ -67,6 +67,7 @@ class scoreboard extends uvm_test;
                 A=testObject.aluA;
                 B=testObject.aluB;
                 expected = A*B;
+            end
             4'b0101: begin //Load 
                actual = testObject.instruction[27:23];
                expected = testObject.register;
