@@ -171,4 +171,10 @@ task directedSpecialFunction5();
     `uvm_info("SEQ", $sformatf("Generated a directed Special Function5 test"), UVM_LOW)
     finish_item(tx);
 endtask
+
+task reset();
+    trace#(3) tx = trace#(3)::type_id::create("tx");
+    start_item(tx);
+    assert(tx.randomize());
+endtask
 endclass 

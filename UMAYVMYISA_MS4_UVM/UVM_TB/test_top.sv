@@ -19,7 +19,7 @@ module top;
     int halfPeriod = 5;
 
 
-    bit clk, rst;
+    bit clk;
     intf vif (clk);
 
     
@@ -64,7 +64,6 @@ module top;
     
     
     initial begin
-        rst = 1;
         clk = 0;
         uvm_config_db #(virtual intf)::set(null, "*", "vif", vif);
         run_test("coreTest");
