@@ -23,19 +23,19 @@ class monitor extends uvm_monitor;
 
     function void connect_phase (uvm_phase phase);
         super.connect_phase(phase);
-        `uvm_info("MONITOR", "Monitor connect phase", UVM_MEDIUM)
+        `uvm_info("MONITOR", "Monitor connect phase", UVM_HIGH)
     endfunction
 
 
 
      task run_phase (uvm_phase phase);
         super.run_phase(phase);
-        `uvm_info("MONITOR", "Monitor run phase", UVM_MEDIUM)
+        `uvm_info("MONITOR", "Monitor run phase", UVM_HIGH)
         testObj = trace#(3)::type_id::create("testObj");
         forever begin
-            `uvm_info("MONITOR", "Waiting for instr_ready", UVM_NONE)
+            `uvm_info("MONITOR", "Waiting for instr_ready", UVM_HIGH)
             wait((vif.instr_ready));
-            `uvm_info("MONITOR", "instr_ready is low", UVM_NONE)
+            `uvm_info("MONITOR", "instr_ready is low", UVM_HIGH)
             case(vif.instr_word[31:28])
                 (4'b0001),
                 (4'b0010),

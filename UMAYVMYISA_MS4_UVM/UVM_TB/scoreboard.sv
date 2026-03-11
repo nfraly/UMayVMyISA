@@ -8,18 +8,18 @@ class scoreboard extends uvm_test;
 
     function new(string name = "scoreboard", uvm_component parent);
         super.new(name, parent);
-        `uvm_info("SCB_CLASS", "Inside Constructor", UVM_MEDIUM)
+        `uvm_info("SCB_CLASS", "Inside Constructor", UVM_HIGH)
     endfunction
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         scb_port = new("scb_port", this);
-        `uvm_info("SCB_CLASS", "Build Phase", UVM_MEDIUM)
+        `uvm_info("SCB_CLASS", "Build Phase", UVM_HIGH)
     endfunction
 
     function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
-        `uvm_info("SCB_CLASS", "Connect Phase", UVM_MEDIUM)
+        `uvm_info("SCB_CLASS", "Connect Phase", UVM_HIGH)
     endfunction
 
     function void write(trace#(3) item);
@@ -28,7 +28,7 @@ class scoreboard extends uvm_test;
 
     task run_phase(uvm_phase phase);
         super.run_phase(phase);
-        `uvm_info("SCB_CLASS", "Run Phase", UVM_MEDIUM)
+        `uvm_info("SCB_CLASS", "Run Phase", UVM_HIGH)
 
         forever begin
 

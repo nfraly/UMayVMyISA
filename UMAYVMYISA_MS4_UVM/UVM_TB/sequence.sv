@@ -3,7 +3,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     localparam corewidth = $clog2(CORES);
     function new(string name = "traceItem");
         super.new(name);
-        `uvm_info("SEQ", "Sequence constructor", UVM_MEDIUM)
+        `uvm_info("SEQ", "Sequence constructor", UVM_HIGH)
     endfunction
 
     
@@ -76,7 +76,7 @@ task directedStore();
     start_item(tx);
     assert(tx.randomize());
     tx.instruction[31:28] = 4'b0110;
-    `uvm_info("SEQ", $sformatf("Generated a directed Store test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a directed Store test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -85,7 +85,7 @@ task directedLoad();
     start_item(tx);
     assert(tx.randomize());
     tx.instruction[31:28] = 4'b0101;
-    `uvm_info("SEQ", $sformatf("Generated a directed Load test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a directed Load test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -96,7 +96,7 @@ task correctStore();
     assert(tx.randomize());
     tx.instruction[31:28] = 4'b0110;
     tx.instruction[10:0] = 11'b000011010; //arbitrary memory destination
-    `uvm_info("SEQ", $sformatf("Generated a very directed Store test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a very directed Store test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -106,7 +106,7 @@ task correctLoad();
     assert(tx.randomize());
     tx.instruction[31:28] = 4'b0101;
     tx.instruction[10:0] = 11'b000011010; // Load from memory address that was previously stored to
-    `uvm_info("SEQ", $sformatf("Generated a very directed Load test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a very directed Load test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -115,7 +115,7 @@ task directedRightShift();
     start_item(tx);
     assert(tx.randomize() with {rst == 0;});
     tx.instruction[31:28] = 4'b0111;
-    `uvm_info("SEQ", $sformatf("Generated a directed Righ Shift test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a directed Righ Shift test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -124,7 +124,7 @@ task directedLeftShift();
     start_item(tx);
     assert(tx.randomize() with {rst == 0;});
     tx.instruction[31:28] = 4'b1000;
-    `uvm_info("SEQ", $sformatf("Generated a directed Left Shit test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a directed Left Shit test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -133,7 +133,7 @@ task directedSpecialFunction1();
     start_item(tx);
     assert(tx.randomize() with {rst == 0;});
     tx.instruction[31:28] = 4'b1001;
-    `uvm_info("SEQ", $sformatf("Generated a directed Special Function1 test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a directed Special Function1 test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -142,7 +142,7 @@ task directedSpecialFunction2();
     start_item(tx);
     assert(tx.randomize() with {rst == 0;});
     tx.instruction[31:28] = 4'b1010;
-    `uvm_info("SEQ", $sformatf("Generated a directed Special Function2 test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a directed Special Function2 test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -151,7 +151,7 @@ task directedSpecialFunction3();
     start_item(tx);
     assert(tx.randomize() with {rst == 0;});
     tx.instruction[31:28] = 4'b1011;
-    `uvm_info("SEQ", $sformatf("Generated a directed Special Function3 test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a directed Special Function3 test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -160,7 +160,7 @@ task directedSpecialFunction4();
     start_item(tx);
     assert(tx.randomize() with {rst == 0;});
     tx.instruction[31:28] = 4'b1100;
-    `uvm_info("SEQ", $sformatf("Generated a directed Special Function4 test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a directed Special Function4 test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -169,7 +169,7 @@ task directedSpecialFunction5();
     start_item(tx);
     assert(tx.randomize() with {rst == 0;});
     tx.instruction[31:28] = 4'b1101;
-    `uvm_info("SEQ", $sformatf("Generated a directed Special Function5 test"), UVM_LOW)
+    `uvm_info("SEQ", $sformatf("Generated a directed Special Function5 test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
