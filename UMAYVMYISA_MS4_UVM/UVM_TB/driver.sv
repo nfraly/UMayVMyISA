@@ -29,6 +29,7 @@ class driver extends uvm_driver #(trace#(3));
     endfunction
 
     virtual task run_phase (uvm_phase phase);
+        string tmp_string;
         super.run_phase(phase);
         `uvm_info("DRIVER", "Driver Run_phase", UVM_LOW)
 
@@ -38,7 +39,8 @@ class driver extends uvm_driver #(trace#(3));
             seq_item_port.get_next_item (testObj);
             `uvm_info ("DRIVER", $sformatf ("About to drive an item"), UVM_HIGH)
             drive_item (testObj);
-            `uvm_info ("DRIVER", $sformatf ("Drove an item"), UVM_HIGH)
+            $swriteh(tmp_string,"%p",testObj.instruction);
+            `uvm_info ("DRIVER", $sformatf ("Drove an item 0X%p", tmp_string), UVM_HIGH)
             seq_item_port.item_done();
         end
         `uvm_info("DRIVER", "Driver Run_phase Complete", UVM_HIGH)
@@ -49,7 +51,10 @@ class driver extends uvm_driver #(trace#(3));
         vif.instr_core_sel = testObj.targetCore;
         vif.instr_word = testObj.instruction;
         vif.instr_valid = 1'b1;
-        wait(vif.instr_ready); vif.instr_valid = 1'b0;
+        repeat(1) @(negedge vif.clk);
+        `uvm_info("DRIVER", "Releasing instr_valid", UVM_HIGH)
+        vif.instr_valid = 1'b0;
+        //wait(vif.instr_ready); vif.instr_valid = 1'b0;
     endtask
 
 endclass

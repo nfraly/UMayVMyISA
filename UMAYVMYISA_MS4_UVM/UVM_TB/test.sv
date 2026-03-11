@@ -35,6 +35,7 @@ class coreTest extends uvm_test;
         seq = traceItem#(3)::type_id::create("seq");
         seq.start(e0.a0.s0); //define this
         //repeat(SOMEAMOUNTOFTIME);
+        #5000;
         phase.drop_objection(this);
     endtask
 

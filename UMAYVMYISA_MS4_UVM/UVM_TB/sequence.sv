@@ -113,9 +113,8 @@ endtask
 task directedRightShift();
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    assert(tx.randomize() with {rst == 0;});
-    tx.instruction[31:28] = 4'b0111;
-    `uvm_info("SEQ", $sformatf("Generated a directed Righ Shift test"), UVM_HIGH)
+    assert(tx.randomize() with {rst == '0; opCode == 4'b0111;});
+    `uvm_info("SEQ", $sformatf("Generated a directed Right Shift test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -124,7 +123,7 @@ task directedLeftShift();
     start_item(tx);
     assert(tx.randomize() with {rst == 0;});
     tx.instruction[31:28] = 4'b1000;
-    `uvm_info("SEQ", $sformatf("Generated a directed Left Shit test"), UVM_HIGH)
+    `uvm_info("SEQ", $sformatf("Generated a directed Left Shift test"), UVM_HIGH)
     finish_item(tx);
 endtask
 
@@ -176,7 +175,8 @@ endtask
 task reset();
     trace#(3) tx = trace#(3)::type_id::create("tx");
     start_item(tx);
-    assert(tx.randomize() with {rst == 1;});
+    assert(tx.randomize() with {rst == 1; opCode == 4'b0000;});
+    `uvm_info("SEQ", $sformatf("Reset sequence"), UVM_HIGH)
     finish_item(tx);
 endtask
 endclass 

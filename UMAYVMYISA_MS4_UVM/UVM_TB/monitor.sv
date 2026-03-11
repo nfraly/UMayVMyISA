@@ -32,9 +32,11 @@ class monitor extends uvm_monitor;
         super.run_phase(phase);
         `uvm_info("MONITOR", "Monitor run phase", UVM_HIGH)
         testObj = trace#(3)::type_id::create("testObj");
+        //repeat (1) @(negedge vif.rst);
         forever begin
+            @(negedge vif.clk);
             `uvm_info("MONITOR", "Waiting for instr_ready", UVM_HIGH)
-            wait((vif.instr_ready));
+            wait((vif.instr_ready && vif.instr_valid));
             `uvm_info("MONITOR", "instr_ready is high", UVM_HIGH)
             case(vif.instr_word[31:28])
                 (4'b0001),
@@ -48,12 +50,12 @@ class monitor extends uvm_monitor;
                 (4'b1011),
                 (4'b1100),
                 (4'b1101): begin
+                    `uvm_info("MONITOR", "Found an ALU op code", UVM_HIGH)
                     repeat (6) @(posedge vif.clk);
                     testObj.opCode <= vif.instr_word[31:28];
                     testObj.aluA <= vif.core_rf_rdata_a_dbg;
                     testObj.aluB <= vif.core_rf_rdata_b_dbg;
                     testObj.result <= vif.core_alu_result_dbg;
-                    `uvm_info("MONITOR", "Sending an ALU op to scoreboard", UVM_HIGH)
                 end
                 (4'b0101): begin
                     repeat (11) @(posedge vif.clk);
@@ -66,7 +68,7 @@ class monitor extends uvm_monitor;
                     //TODO
                 end
             endcase
-
+            `uvm_info("MONITOR", "Sending tx to scoreboard", UVM_HIGH)
             mon_analysis_port.write(testObj);
         end
     endtask

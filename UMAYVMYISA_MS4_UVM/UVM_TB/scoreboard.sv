@@ -37,6 +37,7 @@ class scoreboard extends uvm_test;
             testObject = transactions.pop_front();
             `uvm_info("SCB_CLASS", "Grabbing tx from Monitor", UVM_HIGH)
             compare(testObject); // checker 
+            //TODO: ADD LOGIC FOR WAITING FOR ALL INSTRUCTIONS TO CLEAR
         end
     endtask
 
@@ -47,7 +48,7 @@ class scoreboard extends uvm_test;
 
         case(testObject.opCode) 
             4'b0000: begin//NOP
-                //confirm nothing happens somehow?
+                `uvm_info("Compare", "See a NOP", UVM_HIGH)
             end
             4'b0001: begin//ADD
                 A=testObject.aluA;
