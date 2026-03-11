@@ -81,6 +81,7 @@ class scoreboard extends uvm_test;
             4'b0111: begin//RS
                 A=testObject.aluA;
                 expected = A >> 1'b1;
+                actual = testObject.result;
             end
             4'b1000: begin//LS
                 A=testObject.aluA;
@@ -120,6 +121,7 @@ class scoreboard extends uvm_test;
         end
         else begin
             `uvm_info("Compare", "Transaction passed", UVM_HIGH)
+            `uvm_info("Compare", $sformatf("Actual %h Expected %h", actual, expected), UVM_HIGH)
         end
     endtask
         

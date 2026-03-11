@@ -52,10 +52,12 @@ class monitor extends uvm_monitor;
                 (4'b1101): begin
                     `uvm_info("MONITOR", "Found an ALU op code", UVM_HIGH)
                     repeat (6) @(posedge vif.clk);
-                    testObj.opCode <= vif.instr_word[vif.instr_core_sel][31:28];
-                    testObj.aluA <= vif.core_rf_rdata_a_dbg[vif.instr_core_sel];
-                    testObj.aluB <= vif.core_rf_rdata_b_dbg[vif.instr_core_sel];
-                    testObj.result <= vif.core_alu_result_dbg[vif.instr_core_sel];
+                    testObj.targetCore = vif.instr_core_sel;
+                    testObj.opCode = vif.instr_word[31:28];
+                    testObj.aluA = vif.core_rf_rdata_a_dbg[vif.instr_core_sel];
+                    testObj.aluB = vif.core_rf_rdata_b_dbg[vif.instr_core_sel];
+                    testObj.result = vif.core_alu_result_dbg[vif.instr_core_sel];
+                    `uvm_info("MONITOR", $sformatf("Sending tx to scoreboard %p", testObj), UVM_HIGH)
                 end
                 (4'b0101): begin
                     repeat (11) @(posedge vif.clk);
@@ -70,7 +72,7 @@ class monitor extends uvm_monitor;
                 default:
                     repeat (4) @(posedge vif.clk);
             endcase
-            `uvm_info("MONITOR", "Sending tx to scoreboard", UVM_HIGH)
+            //`uvm_info("MONITOR", $sformatf("Sending tx to scoreboard %p", testObj), UVM_HIGH)
             mon_analysis_port.write(testObj);
         end
     endtask

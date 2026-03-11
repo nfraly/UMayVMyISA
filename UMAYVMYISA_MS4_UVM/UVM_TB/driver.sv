@@ -51,6 +51,7 @@ class driver extends uvm_driver #(trace#(3));
         vif.instr_core_sel = testObj.targetCore;
         vif.instr_word = testObj.instruction;
         vif.instr_valid = 1'b1;
+        $display("%p", testObj);
         repeat(1) @(negedge vif.clk);
         `uvm_info("DRIVER", "Releasing instr_valid", UVM_HIGH)
         vif.instr_valid = 1'b0;
