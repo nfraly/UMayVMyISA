@@ -35,7 +35,7 @@ class monitor extends uvm_monitor;
         forever begin
             `uvm_info("MONITOR", "Waiting for instr_ready", UVM_HIGH)
             wait((vif.instr_ready));
-            `uvm_info("MONITOR", "instr_ready is low", UVM_HIGH)
+            `uvm_info("MONITOR", "instr_ready is high", UVM_HIGH)
             case(vif.instr_word[31:28])
                 (4'b0001),
                 (4'b0010),

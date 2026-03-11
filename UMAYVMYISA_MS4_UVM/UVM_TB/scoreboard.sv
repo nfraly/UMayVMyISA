@@ -114,7 +114,7 @@ class scoreboard extends uvm_test;
             4'b1111: begin//Dump?
             end
         endcase
-        if (actual != expected) begin
+        if (actual !== expected) begin
             `uvm_error("Compare", $sformatf("Transaction failed! Actual %b expected %b", actual, expected))
         end
         else begin
