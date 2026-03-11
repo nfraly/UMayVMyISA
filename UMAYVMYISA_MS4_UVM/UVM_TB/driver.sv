@@ -32,10 +32,6 @@ class driver extends uvm_driver #(trace#(3));
     virtual task run_phase (uvm_phase phase);
         super.run_phase(phase);
         `uvm_info("DRIVER", "Driver Run_phase", UVM_HIGH)
-        vif.rst = '1;
-        repeat(2) @(negedge vif.clk);
-        vif.rst = '0;
-        repeat(2) @(negedge vif.clk);
 
 
         forever begin
@@ -53,7 +49,10 @@ class driver extends uvm_driver #(trace#(3));
         `uvm_info ("DRIVER", $sformatf ("Waiting to drive an item"), UVM_LOW)
         wait(vif.instr_ready);
         `uvm_info ("DRIVER", $sformatf ("Driving an item"), UVM_LOW)
+        vif.instr_core_sel = testObj.targetCore;
         vif.instr_word = testObj.instruction;
+        vif.instr_valid = 1'b1;
+        @(posedge vif.clk); vif.instr_valid = 1'b0;
     endtask
 
 endclass

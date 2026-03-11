@@ -4,6 +4,7 @@ class trace #(parameter CORES = 3) extends uvm_sequence_item;
     rand logic [27:0] payload;
     rand logic [3:0] opCode;
     rand logic [corewidth-1:0] targetCore;
+    rand logic rst;
     logic [31:0] instruction;
     logic [7:0] address;
     logic [4:0] register;
