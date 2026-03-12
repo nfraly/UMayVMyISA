@@ -1,9 +1,10 @@
 import system_widths_pkg::*;
 class trace #(parameter CORES = 3) extends uvm_sequence_item;
     localparam corewidth = $clog2(CORES);
-    rand logic [27:0] payload;
-    rand logic [3:0] opCode;
     rand logic [corewidth-1:0] targetCore;
+    rand logic [3:0] opCode;
+    rand logic [4:0] rs, rd, rt;
+    rand logic [10:0] addr;
     rand logic rst;
     logic [31:0] instruction;
     logic [7:0] address;
@@ -12,47 +13,28 @@ class trace #(parameter CORES = 3) extends uvm_sequence_item;
     logic [31:0] aluB;
     logic [31:0] memData;
     logic [31:0] result;
-    //rand logic [ADDR_W-1:0] addr;
-    //rand logic [DATA_W-1:0] wdata;
-    //rand int unsigned core_id;
-    //rand bit we;
-    //bit mem_req;
-
-    //logic [DATA_W-1:0] rdata;
-    //bit mem_done;
 
     constraint validCore {targetCore inside {[0:CORES-1]};}
     constraint validInstruction {opCode[3:0] inside{[0:13]};}
-    //constraint validPayload {
-    //    unique case (opCode)
-    //        4'b0000:
-    //        4'b0001:
-    //        4'b0010:
-    //        4'b0011:
-    //        4'b0100:
-    //        4'b0101:
-    //        4'b0110:
-    //        4'b0111:
-    //        4'b1000:
-    //        4'b1001:
-    //        4'b1010:
-    //        4'b1011:
-    //        4'b1100:
-    //        4'b1101:
-    //        4'b1110:
-    //        4'b1111:
 
     function void post_randomize();
-        instruction = {opCode, payload};
+        if (opCode == 4'b0110 || opCode == 4'b0101) begin //If it's a load or store
+            instruction = {>>{opCode, rs, addr}};
+            {rd, rt} = 'x;
+        end
+        else begin //literally every other opcode
+            instruction = {>>{opCode, rd, rs, rt}};
+            addr = 'x;
+        end
     endfunction
 
     `uvm_object_utils_begin(trace#(3))
-        `uvm_field_int(instruction, UVM_DEFAULT)
         `uvm_field_int(targetCore, UVM_DEFAULT)
-        //`uvm_field_int(mem_read, UVM_DEFAULT)
-        //`uvm_field_int(mem_we, UVM_DEFAULT)
-        //`uvm_field_int(mem_req, UVM_DEFAULT)
-        //`uvm_field_int(mem_done, UVM_DEFAULT)
+        `uvm_field_int(instruction, UVM_DEFAULT)
+        `uvm_field_int(rd, UVM_DEFAULT)
+        `uvm_field_int(rt, UVM_DEFAULT)
+        `uvm_field_int(rs, UVM_DEFAULT)
+        `uvm_field_int(addr, UVM_DEFAULT)
     `uvm_object_utils_end
 
     function new(string name = "trace");
