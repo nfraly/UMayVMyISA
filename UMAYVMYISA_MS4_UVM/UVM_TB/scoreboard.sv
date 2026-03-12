@@ -130,8 +130,7 @@ class scoreboard extends uvm_scoreboard;
             `uvm_error("Compare", $sformatf("Transaction failed! Actual %b expected %b", actual, expected))
         end
         else begin
-            `uvm_info("Compare", "Transaction passed", UVM_HIGH)
-            `uvm_info("Compare", $sformatf("Actual %h Expected %h", actual, expected), UVM_HIGH)
+            `uvm_info("Compare", $sformatf("Transaction passed: Actual: %b Expected: %b", actual, expected), UVM_HIGH)
         end
     endtask
         

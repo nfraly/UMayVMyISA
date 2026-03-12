@@ -7,7 +7,7 @@ class coreTest extends uvm_test;
     endfunction
 
     env e0;
-    traceItem#(3) seq; 
+    aluDirected#(3) seq; 
     virtual intf vif;
 
     function void build_phase(uvm_phase phase);
@@ -32,7 +32,7 @@ class coreTest extends uvm_test;
         `uvm_info("TEST", "Test run phase", UVM_HIGH)
         phase.raise_objection(this);
         //apply_reset(); //define reset pattern
-        seq = traceItem#(3)::type_id::create("seq");
+        seq = aluDirected#(3)::type_id::create("seq");
         seq.start(e0.a0.s0); //define this
         //repeat(SOMEAMOUNTOFTIME);
         #5000;
