@@ -31,12 +31,11 @@ class monitor extends uvm_monitor;
      task run_phase (uvm_phase phase);
         super.run_phase(phase);
         `uvm_info("MONITOR", "Monitor run phase", UVM_HIGH)
-        testObj = trace#(3)::type_id::create("testObj");
-        //repeat (1) @(negedge vif.rst);
         forever begin
-            @(negedge vif.clk);
+            @(posedge vif.clk);
+            testObj = trace#(3)::type_id::create("testObj");
             `uvm_info("MONITOR", "Waiting for instr_ready", UVM_HIGH)
-            wait((vif.instr_ready && vif.instr_valid));
+            wait((vif.instr_ready && vif.instr_valid && !vif.rst));
             `uvm_info("MONITOR", "instr_ready is high", UVM_HIGH)
             case(vif.instr_word[31:28])
                 (4'b0001),
@@ -50,7 +49,7 @@ class monitor extends uvm_monitor;
                 (4'b1011),
                 (4'b1100),
                 (4'b1101): begin
-                    `uvm_info("MONITOR", "Found an ALU op code", UVM_HIGH)
+                    `uvm_info("MONITOR", $sformatf("Found an ALU op code, instr_ready is %b", vif.instr_ready), UVM_HIGH)
                     repeat (6) @(posedge vif.clk);
                     testObj.targetCore = vif.instr_core_sel;
                     testObj.opCode = vif.instr_word[31:28];

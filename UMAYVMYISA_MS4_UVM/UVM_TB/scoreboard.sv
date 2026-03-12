@@ -86,6 +86,7 @@ class scoreboard extends uvm_test;
             4'b1000: begin//LS
                 A=testObject.aluA;
                 expected = A << 1'b1;
+                actual = testObject.result;
             end
             4'b1001: begin//AB-A
                 A=testObject.aluA;
