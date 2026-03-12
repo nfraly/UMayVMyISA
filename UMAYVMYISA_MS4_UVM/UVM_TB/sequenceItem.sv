@@ -21,7 +21,7 @@ class trace #(parameter CORES = 3) extends uvm_sequence_item;
     //logic [DATA_W-1:0] rdata;
     //bit mem_done;
 
-    constraint validCore {targetCore inside {[0:CORES]};}
+    constraint validCore {targetCore inside {[0:CORES-1]};}
     constraint validInstruction {opCode[3:0] inside{[0:13]};}
     //constraint validPayload {
     //    unique case (opCode)

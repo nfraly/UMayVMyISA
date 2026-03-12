@@ -1,4 +1,4 @@
-class scoreboard extends uvm_test;
+class scoreboard extends uvm_scoreboard;
 
     `uvm_component_utils(scoreboard)
 
@@ -54,21 +54,25 @@ class scoreboard extends uvm_test;
                 A=testObject.aluA;
                 B=testObject.aluB;
                 expected = A+B;
+                actual = testObject.result;
             end
             4'b0010: begin//AND
                 A=testObject.aluA;
                 B=testObject.aluB;
                 expected = A&B;
+                actual = testObject.result;
             end
             4'b0011: begin//SUB
                 A=testObject.aluA;
                 B=testObject.aluB;
                 expected = A-B;
+                actual = testObject.result;
             end
             4'b0100: begin//MUL
                 A=testObject.aluA;
                 B=testObject.aluB;
                 expected = A*B;
+                actual = testObject.result;
             end
             4'b0101: begin //Load 
                actual = testObject.instruction[27:23];
@@ -92,25 +96,30 @@ class scoreboard extends uvm_test;
                 A=testObject.aluA;
                 B=testObject.aluB;
                 expected = A*B-A;
+                actual = testObject.result;
             end
             4'b1010: begin//A*4*B-A
                 A=testObject.aluA;
                 B=testObject.aluB;
                 expected = A*4*B-A;
+                actual = testObject.result;
             end
             4'b1011: begin//AB+A
                 A=testObject.aluA;
                 B=testObject.aluB;
                 expected = A*B+A;
+                actual = testObject.result;
             end
             4'b1100: begin//3A
                 A=testObject.aluA;
                 expected = 3*A;
+                actual = testObject.result;
             end
             4'b1101: begin//AB+B
                 A=testObject.aluA;
                 B=testObject.aluB;
                 expected = A*B+B;
+                actual = testObject.result;
             end
             4'b1110: begin//MVI?
             end

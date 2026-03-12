@@ -19,6 +19,7 @@ class traceItem #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     //assert(tx.randomize());
     //directedTestCases();
     reset();
+    directedTestCases();
     directedRightShift();
     directedLeftShift();
     //finish_item(tx);

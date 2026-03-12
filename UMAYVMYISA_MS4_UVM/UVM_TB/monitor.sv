@@ -33,11 +33,18 @@ class monitor extends uvm_monitor;
         `uvm_info("MONITOR", "Monitor run phase", UVM_HIGH)
         forever begin
             @(posedge vif.clk);
-            testObj = trace#(3)::type_id::create("testObj");
-            `uvm_info("MONITOR", "Waiting for instr_ready", UVM_HIGH)
-            wait((vif.instr_ready && vif.instr_valid && !vif.rst));
+            //`uvm_info("MONITOR", "Waiting for instr_ready", UVM_HIGH)
+            if ((vif.instr_ready && vif.instr_valid && !vif.rst)) begin
+            trace#(3) req;
+            req = trace#(3)::type_id::create("req");
+            req.instruction = vif.instr_word;
+            req.opCode = vif.instr_word[31:28];
+            req.targetCore = vif.instr_core_sel;
             `uvm_info("MONITOR", "instr_ready is high", UVM_HIGH)
-            case(vif.instr_word[31:28])
+            fork
+                automatic trace#(3) testObj = req;
+                begin
+            case(testObj.opCode)
                 (4'b0001),
                 (4'b0010),
                 (4'b0011),
@@ -50,13 +57,12 @@ class monitor extends uvm_monitor;
                 (4'b1100),
                 (4'b1101): begin
                     `uvm_info("MONITOR", $sformatf("Found an ALU op code, instr_ready is %b", vif.instr_ready), UVM_HIGH)
-                    repeat (6) @(posedge vif.clk);
-                    testObj.targetCore = vif.instr_core_sel;
-                    testObj.opCode = vif.instr_word[31:28];
-                    testObj.aluA = vif.core_rf_rdata_a_dbg[vif.instr_core_sel];
-                    testObj.aluB = vif.core_rf_rdata_b_dbg[vif.instr_core_sel];
-                    testObj.result = vif.core_alu_result_dbg[vif.instr_core_sel];
-                    `uvm_info("MONITOR", $sformatf("Sending tx to scoreboard %p", testObj), UVM_HIGH)
+                    @(posedge vif.clk);
+                    testObj.aluA = vif.core_rf_rdata_a_dbg[testObj.targetCore];
+                    testObj.aluB = vif.core_rf_rdata_b_dbg[testObj.targetCore];
+                    repeat (5) @(posedge vif.clk);
+                    testObj.result = vif.core_rf_wdata_dbg[testObj.targetCore];
+                    //`uvm_info("MONITOR", $sformatf("Sending tx to scoreboard %p", testObj), UVM_HIGH)
                 end
                 (4'b0101): begin
                     repeat (11) @(posedge vif.clk);
@@ -74,5 +80,8 @@ class monitor extends uvm_monitor;
             //`uvm_info("MONITOR", $sformatf("Sending tx to scoreboard %p", testObj), UVM_HIGH)
             mon_analysis_port.write(testObj);
         end
+    join_none
+        end
+    end
     endtask
 endclass
