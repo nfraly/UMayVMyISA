@@ -87,7 +87,6 @@ class monitor extends uvm_monitor;
                     bit got_addr = 0;
 
                     forever begin
-                        @(posedge vif.clk);
                         `uvm_info("MONITOR", $sformatf("bus shows address %b", vif.core_iu_mem_addr_dbg[testObj.targetCore]), UVM_HIGH)
 
                         //if (!got_addr && vif.core_iu_mem_done_dbg[testObj.targetCore]) begin
@@ -97,10 +96,11 @@ class monitor extends uvm_monitor;
                             `uvm_info("MONITOR", $sformatf("Grabbing address %b and data %d to scoreboard", testObj.address, testObj.memData), UVM_HIGH)
                             got_addr = 1'b1;
                         end
-                        if (vif.core_iu_mem_done_dbg[testObj.targetCore]) begin
+                        if (got_addr && vif.core_iu_mem_done_dbg[testObj.targetCore]) begin
                             `uvm_info("MONITOR", $sformatf("Found a STORE opcode, sending address %X and data %d to scoreboard", testObj.address, testObj.memData), UVM_HIGH)
                             break;
                         end
+                        @(posedge vif.clk);
                     end
                 end
                 default:
