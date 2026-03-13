@@ -14,7 +14,6 @@ class aluDirected #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     trace#(3) tx;
 
     task body();
-        tx = trace#(3)::type_id::create("trace"); 
         directedTestCases();
     endtask
 

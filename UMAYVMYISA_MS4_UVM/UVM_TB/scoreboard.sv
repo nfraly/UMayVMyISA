@@ -79,8 +79,8 @@ class scoreboard extends uvm_scoreboard;
                expected = testObject.register;
             end
             4'b0110: begin //Store
-                actual = testObject.instruction[27:23];
-                expected = testObject.register;
+                actual = testObject.address;
+                expected = testObject.addr;
             end
             4'b0111: begin//RS
                 A=testObject.aluA;
@@ -127,7 +127,7 @@ class scoreboard extends uvm_scoreboard;
             end
         endcase
         if (actual !== expected) begin
-            `uvm_error("Compare", $sformatf("Transaction failed! Actual %b expected %b", actual, expected))
+            `uvm_error("Compare", $sformatf("Transaction failed! opCode: %b Actual %b expected %b", testObject.opCode ,actual, expected))
         end
         else begin
             `uvm_info("Compare", $sformatf("Transaction passed: Actual: %b Expected: %b", actual, expected), UVM_HIGH)

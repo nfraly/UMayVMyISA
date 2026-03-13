@@ -47,7 +47,7 @@ class driver extends uvm_driver #(trace#(3));
     endtask
 
     task drive_item (trace#(3) testObj);
-        `uvm_info ("DRIVER", $sformatf ("Driving an item"), UVM_HIGH)
+        `uvm_info ("DRIVER", $sformatf ("Driving an item on core %d", testObj.targetCore), UVM_HIGH)
         vif.rst = testObj.rst;
         @(posedge vif.clk);
         wait (vif.core_ready_vec[testObj.targetCore]);

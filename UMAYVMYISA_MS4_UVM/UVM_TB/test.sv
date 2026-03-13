@@ -41,15 +41,14 @@ class coreTest extends uvm_test;
         resetSeq.start(e0.a0.s0);
         aluSeq = aluDirected#(3)::type_id::create("aluSeq");
         aluSeq.start(e0.a0.s0);
-        //fillCleanSeq = fillClean#(3)::type_id::create("fillCleanSeq");
-        //fillCleanSeq.start(e0.a0.s0);
-        //testCleanSeq = testClean#(3)::type_id::create("testCleanSeq");
-        //testCleanSeq.start(e0.a0.s0);
-        //fillDirtySeq = fillDirty#(3)::type_id::create("fillDirtySeq");
-        //fillDirtySeq.start(e0.a0.s0);
-        //testDirtySeq = testDirty#(3)::type_id::create("testDirtySeq");
-        //testDirtySeq.start(e0.a0.s0);
-        #5000;
+        fillCleanSeq = fillClean#(3)::type_id::create("fillCleanSeq");
+        fillCleanSeq.start(e0.a0.s0);
+        testCleanSeq = testClean#(3)::type_id::create("testCleanSeq");
+        testCleanSeq.start(e0.a0.s0);
+        fillDirtySeq = fillDirty#(3)::type_id::create("fillDirtySeq");
+        fillDirtySeq.start(e0.a0.s0);
+        testDirtySeq = testDirty#(3)::type_id::create("testDirtySeq");
+        testDirtySeq.start(e0.a0.s0);
         phase.drop_objection(this);
     endtask
 

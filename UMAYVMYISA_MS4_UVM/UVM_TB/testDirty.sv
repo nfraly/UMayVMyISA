@@ -6,7 +6,7 @@ class testDirty #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
         `uvm_info("DRTTST", "DRTTST constructor", UVM_HIGH)
     endfunction
 
-    logic [corewidth-1:0] targ;
+    logic [corewidth:0] targ;
 
     task body();
         for (targ = 0; targ < CORES; targ++) begin

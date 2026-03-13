@@ -6,9 +6,9 @@ class fillDirty #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
         `uvm_info("DRTFIL", "DRTFIL constructor", UVM_HIGH)
     endfunction
 
-    logic [2:0] i;
-    logic [1:0] j;
-    logic [corewidth-1:0] targ;
+    logic [3:0] i;
+    logic [3:0] j;
+    logic [corewidth:0] targ;
 
     task body();
         for (targ = 0; targ < CORES; targ++) begin

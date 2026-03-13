@@ -15,6 +15,7 @@ class trace #(parameter CORES = 3) extends uvm_sequence_item;
     logic [31:0] aluA;
     logic [31:0] aluB;
     logic [31:0] memData;
+    logic [1:0] memPath; //00 for hit, 01 for clean miss, 10 for dirty miss
     logic [31:0] result;
 
     constraint validCore {targetCore inside {[0:CORES-1]};}
