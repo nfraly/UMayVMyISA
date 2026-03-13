@@ -80,7 +80,7 @@ class scoreboard extends uvm_scoreboard;
             end
             4'b0110: begin //Store
                 actual = testObject.address;
-                expected = testObject.addr;
+                expected = testObject.instruction[22:12];
             end
             4'b0111: begin//RS
                 A=testObject.aluA;

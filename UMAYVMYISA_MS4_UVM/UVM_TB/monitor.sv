@@ -91,6 +91,7 @@ class monitor extends uvm_monitor;
                         if (!got_addr && vif.core_iu_mem_done_dbg[testObj.targetCore]) begin
                             testObj.address = vif.core_iu_mem_addr_dbg[testObj.targetCore];
                             testObj.memData = vif.core_iu_mem_wdata_dbg[testObj.targetCore];
+                            `uvm_info("MONITOR", $sformatf("Grabbing address %b and data %d to scoreboard", testObj.address, testObj.memData), UVM_HIGH)
                             got_addr = 1'b1;
                         end
                         if (vif.core_iu_mem_done_dbg[testObj.targetCore]) begin
