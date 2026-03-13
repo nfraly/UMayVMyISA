@@ -7,9 +7,12 @@ class coreTest extends uvm_test;
     endfunction
 
     env e0;
-    aluDirected#(3) seq; 
+    aluDirected#(3) aluSeq; 
     fillClean#(3) fillCleanSeq;
     testClean#(3) testCleanSeq;
+    fillDirty#(3) fillDirtySeq;
+    testDirty#(3) testDirtySeq;
+    resetSequence#(3) resetSeq;
     virtual intf vif;
 
     function void build_phase(uvm_phase phase);
@@ -33,20 +36,21 @@ class coreTest extends uvm_test;
         super.run_phase(phase);
         `uvm_info("TEST", "Test run phase", UVM_HIGH)
         phase.raise_objection(this);
-        //apply_reset(); //define reset pattern
-        seq = aluDirected#(3)::type_id::create("seq");
-        seq.start(e0.a0.s0); //define this
-        fillCleanSeq = fillClean#(3)::type_id::create("fillCleanSeq");
-        fillCleanSeq.start(e0.a0.s0);
-        testCleanSeq = testClean#(3)::type_id::create("testCleanSeq");
-        testCleanSeq.start(e0.a0.s0);
-        //repeat(SOMEAMOUNTOFTIME);
+
+        resetSeq = resetSequence#(3)::type_id::create("resetSequence");
+        resetSeq.start(e0.a0.s0);
+        aluSeq = aluDirected#(3)::type_id::create("aluSeq");
+        aluSeq.start(e0.a0.s0);
+        //fillCleanSeq = fillClean#(3)::type_id::create("fillCleanSeq");
+        //fillCleanSeq.start(e0.a0.s0);
+        //testCleanSeq = testClean#(3)::type_id::create("testCleanSeq");
+        //testCleanSeq.start(e0.a0.s0);
+        //fillDirtySeq = fillDirty#(3)::type_id::create("fillDirtySeq");
+        //fillDirtySeq.start(e0.a0.s0);
+        //testDirtySeq = testDirty#(3)::type_id::create("testDirtySeq");
+        //testDirtySeq.start(e0.a0.s0);
         #5000;
         phase.drop_objection(this);
-    endtask
-
-    virtual task apply_reset();
-        vif.rst = 1;
     endtask
 
 endclass

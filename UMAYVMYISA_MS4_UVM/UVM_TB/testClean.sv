@@ -1,5 +1,5 @@
 class testClean #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
-    `uvm_object_utils(testClean#(3)
+    `uvm_object_utils(testClean#(3))
     localparam corewidth = $clog2(CORES);
     function new(string name = "testClean");
         super.new(name);
@@ -9,7 +9,6 @@ class testClean #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     logic [corewidth-1:0] core;
 
     task body();
-        tx = trace#(3)::type_id::create("trace");
         for (core = 0; core < CORES; core++) begin
             loadHit(core);
             loadMiss(core);

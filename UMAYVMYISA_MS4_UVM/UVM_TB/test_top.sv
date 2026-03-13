@@ -5,8 +5,11 @@ import uvm_pkg::*;
 
 `include "interface.sv"
 `include "sequenceItem.sv"
-//`include "sequence.sv"
+`include "resetSequence.sv"
+`include "fillDirty.sv"
+`include "testDirty.sv"
 `include "fillClean.sv"
+`include "testClean.sv"
 `include "aluDirected.sv"
 `include "sequencer.sv"
 `include "driver.sv"
