@@ -25,7 +25,7 @@ module memory (
   // 1 cycle response for Loads/Stores
   always_ff @(posedge clk or negedge resetN) begin
     if (!resetN) begin
-      $readmemh("init_memory", memory_size);
+      $readmemh("../rtl/init_memory", memory_size);
       resp_data_r <= '0;
       resp_valid_r <= 0;
     end

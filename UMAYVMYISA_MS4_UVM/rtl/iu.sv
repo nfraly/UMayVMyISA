@@ -120,9 +120,13 @@ module instruction_unit (
     end
 
     // For STR, select source register directly from instr_in while in IDLE
-    // so rf_data_a is ready before a memory request is issued
     if (state == IDLE && instr_valid) begin
       if (opcode_t'(instr_in[31:28]) == STR) rf_addr_a = instr_in[27:23];
+    end
+
+    // Need to keep STR source register selected while issuing/waiting on memory
+    if ((state inside {ISSUE_MEM, WAIT_MEM}) && (op_r == STR)) begin
+      rf_addr_a = rt_r;
     end
 
     // Set writeback enable only when finished
@@ -164,6 +168,10 @@ module instruction_unit (
     end 
     else begin
   
+      // IU FSM 
+      //   IDLE, DONE
+      //   MEMORY OPS: ISSUE_MEM, WAIT_MEM
+      //   ARITHMETIC OPS: ISSUE_ALU, WAIT_ALU
 
       case (state)
         IDLE: begin
@@ -186,13 +194,12 @@ module instruction_unit (
               illegal_pending_r <= 1'b1;
               state <= DONE;
             end 
-	          else if (is_mem_op(op)) begin
+            else if (is_mem_op(op)) begin
               // Need to latch here so mem_write stays stable in ISSUE_MEM/WAIT_MEM states
-              store_data_r <= rf_data_a[7:0];
               state <= ISSUE_MEM;
             end 
-	          else if (is_alu_op(op)) state <= ISSUE_ALU;
-	          else begin
+            else if (is_alu_op(op)) state <= ISSUE_ALU;
+            else begin
               // Treat any other input as illegal
               illegal_pending_r <= 1'b1;
               state <= DONE;
@@ -200,27 +207,30 @@ module instruction_unit (
           end
         end
 
+        // Begin the LDR/STR memory request
         ISSUE_MEM: begin
+          if (op_r == STR) store_data_r <= rf_data_a[7:0];
           miu.mem_we <= (op_r == STR);
           miu.mem_addr <= addr_r;
-          miu.mem_write <= store_data_r;
+          miu.mem_write <= (op_r == STR) ? rf_data_a[7:0] : 8'h00;
           miu.mem_req <= 1'b1;
           state <= WAIT_MEM;
         end
 
+        // Hold the memory request until mem_done, then finish LDR/STR
         WAIT_MEM: begin
-		      miu.mem_we <= (op_r == STR);
-		      miu.mem_addr <= addr_r;
-		      miu.mem_write <= store_data_r;
-		      miu.mem_req <= 1'b1;
+          miu.mem_we <= (op_r == STR);
+          miu.mem_addr <= addr_r;
+          miu.mem_write <= store_data_r;
+          miu.mem_req <= 1'b1;
 
           if (miu.mem_done) begin
-		        miu.mem_req <= 1'b0;	  
-
+            miu.mem_req <= 1'b0;
+ 
             if (op_r == LDR) begin
               wb_valid_r <= 1'b1;
               wb_addr_r <= rt_r;
-	            // Zero pad upper mem_read bits
+              // Zero pad upper mem_read bits
               wb_data_r <= {24'h0, miu.mem_read};
             end
 
@@ -228,7 +238,7 @@ module instruction_unit (
           end
         end
 
-	// Placeholder if need to wait 1 cycle before WAIT_ALU
+        // Placeholder if need to wait 1 cycle before WAIT_ALU
         ISSUE_ALU: state <= WAIT_ALU;
 
         WAIT_ALU: begin

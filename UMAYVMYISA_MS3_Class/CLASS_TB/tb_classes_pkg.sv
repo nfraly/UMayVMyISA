@@ -1,6 +1,6 @@
 // tb_classes_pkg.sv
 // Aggregates TB class files for easy compiles
-`include "interfaces.sv"
+`include "../rtl/interfaces.sv"
 `include "tb_pkg.sv"
 
 package tb_classes_pkg;

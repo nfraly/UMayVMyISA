@@ -1,0 +1,15 @@
++incdir+./
+      ./tb_classes_pkg.sv
+      ./tb_top.sv
++incdir+../rtl/
+      ../rtl/opcode_pkg.sv
+      ../rtl/alu.sv
+      ../rtl/cache.sv
+      ../rtl/mem_arbiter.sv
+      ../rtl/memory.sv
+      ../rtl/miu.sv
+      ../rtl/mp_system.sv
++incdir+../rtl/arbiter/
+      ../rtl/arbiter/rr_arbiter.sv
+      ../rtl/arbiter/rr_if.sv
+      ../rtl/arbiter/simple_priority_arbiter.sv
