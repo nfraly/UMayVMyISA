@@ -69,6 +69,7 @@ class monitor extends uvm_monitor;
 
                     forever begin
                         @(posedge vif.clk);
+                        `uvm_info("MONITOR", $sformatf("bus shows address %b", vif.core_iu_mem_addr_dbg[testObj.targetCore]), UVM_HIGH)
 
                         if (!got_addr && vif.core_iu_mem_req_dbg[testObj.targetCore]) begin
                             testObj.address = vif.core_iu_mem_addr_dbg[testObj.targetCore];
@@ -87,8 +88,10 @@ class monitor extends uvm_monitor;
 
                     forever begin
                         @(posedge vif.clk);
+                        `uvm_info("MONITOR", $sformatf("bus shows address %b", vif.core_iu_mem_addr_dbg[testObj.targetCore]), UVM_HIGH)
 
-                        if (!got_addr && vif.core_iu_mem_done_dbg[testObj.targetCore]) begin
+                        //if (!got_addr && vif.core_iu_mem_done_dbg[testObj.targetCore]) begin
+                        if (!got_addr && vif.core_iu_mem_req_dbg[testObj.targetCore] && vif.core_iu_mem_we_dbg[testObj.targetCore]) begin
                             testObj.address = vif.core_iu_mem_addr_dbg[testObj.targetCore];
                             testObj.memData = vif.core_iu_mem_wdata_dbg[testObj.targetCore];
                             `uvm_info("MONITOR", $sformatf("Grabbing address %b and data %d to scoreboard", testObj.address, testObj.memData), UVM_HIGH)
