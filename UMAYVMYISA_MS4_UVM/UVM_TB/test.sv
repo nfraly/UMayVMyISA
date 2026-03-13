@@ -8,6 +8,8 @@ class coreTest extends uvm_test;
 
     env e0;
     aluDirected#(3) seq; 
+    fillClean#(3) fillCleanSeq;
+    testClean#(3) testCleanSeq;
     virtual intf vif;
 
     function void build_phase(uvm_phase phase);
@@ -34,6 +36,10 @@ class coreTest extends uvm_test;
         //apply_reset(); //define reset pattern
         seq = aluDirected#(3)::type_id::create("seq");
         seq.start(e0.a0.s0); //define this
+        fillCleanSeq = fillClean#(3)::type_id::create("fillCleanSeq");
+        fillCleanSeq.start(e0.a0.s0);
+        testCleanSeq = testClean#(3)::type_id::create("testCleanSeq");
+        testCleanSeq.start(e0.a0.s0);
         //repeat(SOMEAMOUNTOFTIME);
         #5000;
         phase.drop_objection(this);

@@ -5,7 +5,9 @@ import uvm_pkg::*;
 
 `include "interface.sv"
 `include "sequenceItem.sv"
-`include "sequence.sv"
+//`include "sequence.sv"
+`include "fillClean.sv"
+`include "aluDirected.sv"
 `include "sequencer.sv"
 `include "driver.sv"
 `include "monitor.sv"
