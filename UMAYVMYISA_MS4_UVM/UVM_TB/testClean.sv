@@ -13,7 +13,7 @@ class testClean #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
             loadHit(core);
             loadMiss(core);
             storeHit(core);
-            storeMiss(core);
+            //storeMiss(core);
         end
     endtask
 

@@ -12,6 +12,7 @@ class fillDirty #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
 
     task body();
         for (targ = 0; targ < CORES; targ++) begin
+            #10;
             fill(targ);
         end
     endtask

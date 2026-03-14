@@ -19,15 +19,30 @@ class testDirty #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
 */
 
     task body();
-        for (targ = 0; targ < CORES; targ++) begin
-            primeStoreReg(targ, 5'd1, 11'h000); // load 0x05 into r1
-            storeHit(targ, 5'd1);
-            loadHit(targ);
+        //for (targ = 0; targ < 2; targ++) begin
+            primeStoreReg(0, 5'd1, 11'h000); // load 0x05 into r1
+            storeHit(0, 5'd1);
+            loadHit(0);
             //primeStoreReg(targ, 5'd2, 11'h001); // load 0x07 into r2
-            primeStoreReg(targ, 5'd2, 11'h049);
-            storeMiss(targ, 5'd2);
-            loadMiss(targ);
-        end    
+            primeStoreReg(0, 5'd2, 11'h049);
+            storeMiss(0, 5'd2);
+            loadMiss(0);
+            primeStoreReg(1, 5'd1, 11'h000); // load 0x05 into r1
+            storeHit(1, 5'd1);
+            loadHit(1);
+            //primeStoreReg(targ, 5'd2, 11'h001); // load 0x07 into r2
+            primeStoreReg(1, 5'd2, 11'h049);
+            storeMiss(1, 5'd2);
+            loadMiss(1);
+            primeStoreReg(2, 5'd1, 11'h000); // load 0x05 into r1
+            storeHit(2, 5'd1);
+            loadHit(2);
+            //primeStoreReg(targ, 5'd2, 11'h001); // load 0x07 into r2
+            primeStoreReg(2, 5'd2, 11'h049);
+            storeMiss(2, 5'd2);
+            loadMiss(2);
+
+        //end    
     endtask
 
     task primeStoreReg(logic [corewidth-1:0] target, logic [4:0] reg_id, logic [10:0] addr11);
