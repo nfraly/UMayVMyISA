@@ -30,26 +30,43 @@ class testDirty #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
         end    
     endtask
 
-    task storeHit(logic [corewidth-1:0] target);
+    task primeStoreReg(logic [corewidth-1:0] target, logic [4:0] reg_id, logic [10:0] addr11);
         trace#(3) tx = trace#(3)::type_id::create("tx");
+        logic [5:0] t;
+        logic [2:0] i;
+        logic [1:0] o;
+        t = addr11[10:5];
+        i = addr11[4:2];
+        o = addr11[1:0];
         start_item(tx);
-        assert(tx.randomize() with {rst == 0; opCode == 4'b0110; tag == 2; targetCore == target;});
+        assert(tx.randomize() with {
+            rst == 0; opCode == 4'b0101; targetCore == target;
+            rt == reg_id; tag == t; index == i; offset == o;
+        });
         finish_item(tx);
-        `uvm_info("DRTTST", "Testing hits with cache dirty", UVM_HIGH)
+        `uvm_info("DRTTST", $sformatf("Priming r%0d from addr 0x%03h", reg_id, addr11), UVM_HIGH)
     endtask
 
-    task storeMiss(logic [corewidth-1:0] target);
+    task storeHit(logic [corewidth-1:0] target, logic [4:0] src_reg);
         trace#(3) tx = trace#(3)::type_id::create("tx");
         start_item(tx);
-        assert(tx.randomize() with {rst == 0; opCode == 4'b0110; tag == 5; offset == 2'b01; targetCore == target;});
+        assert(tx.randomize() with {rst == 0; opCode == 4'b0110; tag == 2; index == 3'd2; offset == 2'b01; rt == src_reg; targetCore == target;});
         finish_item(tx);
-        `uvm_info("DRTTST", "Testing misses with cache dirty", UVM_HIGH)
+        `uvm_info("DRTTST", $sformatf("Testing hits with cache dirty (src r%0d)", src_reg), UVM_HIGH)
+    endtask
+
+    task storeMiss(logic [corewidth-1:0] target, logic [4:0] src_reg);
+        trace#(3) tx = trace#(3)::type_id::create("tx");
+        start_item(tx);
+        assert(tx.randomize() with {rst == 0; opCode == 4'b0110; tag == 5; index == 3'd5; offset == 2'b01; rt == src_reg; targetCore == target;});
+        finish_item(tx);
+        `uvm_info("DRTTST", $sformatf("Testing misses with cache dirty (src r%0d)", src_reg), UVM_HIGH)
     endtask
 
     task loadHit(logic [corewidth-1:0] target);
         trace#(3) tx = trace#(3)::type_id::create("tx");
         start_item(tx);
-        assert(tx.randomize() with {rst == 0; opCode == 4'b0101; tag == 2; targetCore == target;});
+        assert(tx.randomize() with {rst == 0; opCode == 4'b0101; tag == 2; index == 3'd2; offset == 2'b01; targetCore == target;});
         finish_item(tx);
         `uvm_info("DRTTST", "Testing hits with cache dirty", UVM_HIGH)
     endtask
@@ -57,7 +74,7 @@ class testDirty #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     task loadMiss(logic [corewidth-1:0] target);
         trace#(3) tx = trace#(3)::type_id::create("tx");
         start_item(tx);
-        assert(tx.randomize() with {rst == 0; opCode == 4'b0101; tag == 5; offset == 2'b01; targetCore == target;});
+        assert(tx.randomize() with {rst == 0; opCode == 4'b0101; tag == 5; index == 3'd5; offset == 2'b01; targetCore == target;});
         finish_item(tx);
         `uvm_info("DRTTST", "Testing misses with cache dirty", UVM_HIGH)
     endtask
