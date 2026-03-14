@@ -7,10 +7,10 @@ class trace #(parameter CORES = 3) extends uvm_sequence_item;
     rand logic [1:0] offset;
     rand logic [2:0] index;
     rand logic [5:0] tag;
-    logic [10:0] addr;
+    logic [ADDR_W-1:0] addr;
     rand logic rst;
     logic [31:0] instruction;
-    logic [7:0] address;
+    logic [ADDR_W-1:0] address;		// Address is 11 bits
     logic [4:0] register;
     logic [31:0] aluA;
     logic [31:0] aluB;
@@ -23,11 +23,12 @@ class trace #(parameter CORES = 3) extends uvm_sequence_item;
 
     function void post_randomize();
         if (opCode == 4'b0110 || opCode == 4'b0101) begin //If it's a load or store
-            instruction = {>>{opCode, rs, tag, index, offset}};
-            {rd, rt} = 'x;
+            instruction = {opCode, rt, 12'b0, tag, index, offset};
+	        rd = 'x;
+	        rs = 'x;
         end
         else begin //literally every other opcode
-            instruction = {>>{opCode, rd, rs, rt}};
+            instruction = {opCode, rt, rs, rd, 13'b0};
             {offset, index, tag} = 'x;
         end
         addr = {tag, index, offset};

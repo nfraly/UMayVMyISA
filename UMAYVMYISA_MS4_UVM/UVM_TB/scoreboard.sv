@@ -5,6 +5,14 @@ class scoreboard extends uvm_scoreboard;
     uvm_analysis_imp #(trace#(3), scoreboard) scb_port;
 
     trace#(3) transactions[$];
+    localparam int ADDR_W = 11;
+    localparam int MEM_DEPTH = (1 << ADDR_W);
+    logic [7:0] shadow_mem [0:MEM_DEPTH-1];
+    bit shadow_valid [0:MEM_DEPTH-1];
+
+    function bit has_x8(logic [7:0] v);
+        return ((^v) === 1'bx);
+    endfunction
 
     function new(string name = "scoreboard", uvm_component parent);
         super.new(name, parent);
@@ -14,6 +22,10 @@ class scoreboard extends uvm_scoreboard;
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         scb_port = new("scb_port", this);
+        for (int i = 0; i < MEM_DEPTH; ++i) begin
+            shadow_mem[i] = '0;
+            shadow_valid[i] = 1'b0;
+        end
         `uvm_info("SCB_CLASS", "Build Phase", UVM_HIGH)
     endfunction
 
@@ -74,13 +86,73 @@ class scoreboard extends uvm_scoreboard;
                 expected = A*B;
                 actual = testObject.result;
             end
-            4'b0101: begin //Load 
-               actual = testObject.instruction[27:23];
-               expected = testObject.register;
+            4'b0101: begin //Load
+                logic [10:0] load_addr;
+                logic [4:0] exp_rd;
+                logic [4:0] act_rd;
+                logic [7:0] act_data;
+                logic [7:0] exp_data;
+
+                exp_rd = testObject.instruction[27:23];
+                act_rd = testObject.register;
+                load_addr = testObject.instruction[10:0];
+                act_data = testObject.result[7:0];
+
+                if (act_rd !== exp_rd) begin
+                    `uvm_error("Compare", $sformatf("LOAD rd mismatch core=%0d addr=0x%03h actual_rd=%0d expected_rd=%0d",
+                        testObject.targetCore, load_addr, act_rd, exp_rd))
+                    return;
+                end
+
+
+                if (!shadow_valid[load_addr]) begin
+		            `uvm_info("Compare", $sformatf("LOAD addr 0x%03h has no prior STORE in shadow model; skipping data compare", load_addr), UVM_HIGH)
+                    return;
+                end
+
+                if (has_x8(act_data)) begin
+                    `uvm_error("Compare", $sformatf("LOAD data has X core=%0d addr=0x%03h data=%h",
+                        testObject.targetCore, load_addr, act_data))
+                    return;
+                end
+
+                exp_data = shadow_mem[load_addr];
+                if (act_data !== exp_data) begin
+                    `uvm_error("Compare", $sformatf("LOAD data mismatch core=%0d addr=0x%03h actual=%02h expected=%02h",
+                        testObject.targetCore, load_addr, act_data, exp_data))
+                end
+                else begin
+                    `uvm_info("Compare", $sformatf("LOAD data pass core=%0d addr=0x%03h data=%02h",
+                        testObject.targetCore, load_addr, act_data), UVM_HIGH)
+                end
+                return;
             end
             4'b0110: begin //Store
-                actual = testObject.address;
-                expected = testObject.instruction[22:12];
+                logic [10:0] exp_addr;
+                logic [10:0] act_addr;
+                logic [7:0] store_data;
+
+                exp_addr = testObject.instruction[10:0];
+                act_addr = testObject.address[10:0];
+                store_data = testObject.memData[7:0];
+
+                if (act_addr !== exp_addr) begin
+                    `uvm_error("Compare", $sformatf("STORE addr mismatch core=%0d actual=0x%03h expected=0x%03h",
+                        testObject.targetCore, act_addr, exp_addr))
+                    return;
+                end
+
+                if (has_x8(store_data)) begin
+                    `uvm_error("Compare", $sformatf("STORE data has X core=%0d addr=0x%03h data=%h",
+                        testObject.targetCore, act_addr, store_data))
+                    return;
+                end
+
+                shadow_mem[act_addr] = store_data;
+                shadow_valid[act_addr] = 1'b1;
+                `uvm_info("Compare", $sformatf("STORE model update core=%0d addr=0x%03h data=%02h",
+                    testObject.targetCore, act_addr, store_data), UVM_HIGH)
+                return;
             end
             4'b0111: begin//RS
                 A=testObject.aluA;

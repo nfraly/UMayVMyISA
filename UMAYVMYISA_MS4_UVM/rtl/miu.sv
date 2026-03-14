@@ -56,8 +56,8 @@ module miu (
           // Otherwise LDR/STR can sample X 
           if (iu_if.mem_req && !req_holdoff_r &&
               ((iu_if.mem_we === 1'b0) || (iu_if.mem_we === 1'b1)) &&
-              (^iu_if.mem_addr !== 1'bx) &&
-              (^iu_if.mem_write !== 1'bx)) begin
+              (^iu_if.mem_addr !== 1'bx)) begin
+
             // Save IU request
             we_r <= iu_if.mem_we;
             addr_r <= iu_if.mem_addr;

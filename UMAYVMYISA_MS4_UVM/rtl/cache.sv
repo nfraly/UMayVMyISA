@@ -110,7 +110,7 @@ module cache (
   wire got_mem_resp = (state inside {WB_WAIT, FETCH_WAIT, SNOOP_WB_WAIT}) && mem_if.mem_resp_valid;
 
   // MIU side
-  assign miu_if.cache_req_ready = (state == IDLE) && !need_snoop_req;
+  assign miu_if.cache_req_ready = (state == IDLE) && !need_snoop_req && !snoop_pending;
   assign miu_if.cache_resp_valid = resp_valid;
   assign miu_if.cache_resp_data = resp_data;
   assign snoop_req_valid = need_snoop_req;
