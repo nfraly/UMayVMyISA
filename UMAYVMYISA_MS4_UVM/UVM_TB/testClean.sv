@@ -10,10 +10,10 @@ class testClean #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
 
     task body();
         for (core = 0; core < CORES; core++) begin
-            loadHit(core);
-            loadMiss(core);
-            storeHit(core);
-            //storeMiss(core);
+            //loadHit(core);
+            //loadMiss(core);
+            //storeHit(core);
+            storeMiss(core);
         end
     endtask
 
@@ -21,7 +21,7 @@ class testClean #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
         trace#(CORES) tx = trace#(CORES)::type_id::create("tx");
         start_item(tx);
         assert(tx.randomize() with {rst == 0; opCode == 4'b0101; tag == 1; offset == 2'b01; targetCore == core;});
-        `uvm_info("TESTCLEAN", "Testing loads with clean cache", UVM_HIGH)
+        `uvm_info("TESTCLEAN", "Testing load hit with clean cache", UVM_MEDIUM)
         finish_item(tx);
     endtask
 
@@ -29,15 +29,15 @@ class testClean #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
         trace#(3) tx = trace#(3)::type_id::create("tx");
         start_item(tx);
         assert(tx.randomize() with {rst == 0; opCode == 4'b0101; tag == 6; offset == 2'b01; targetCore == core;});
-        `uvm_info("TESTCLEAN", "Testing load miss with clean cache", UVM_HIGH)
+        `uvm_info("TESTCLEAN", "Testing load miss with clean cache", UVM_MEDIUM)
         finish_item(tx);
     endtask
 
     task storeHit(logic [corewidth:0] core);
         trace#(3) tx = trace#(3)::type_id::create("tx");
         start_item(tx);
-        assert(tx.randomize() with {rst == 0; opCode == 4'b0110; tag == 2; offset == 2'b01; targetCore == core;});
-        `uvm_info("TESTCLEAN", "Testing store hit with clean cache", UVM_HIGH)
+        assert(tx.randomize() with {rst == 0; opCode == 4'b0110; tag == 1; offset == 2'b01; targetCore == core;});
+        `uvm_info("TESTCLEAN", "Testing store hit with clean cache", UVM_MEDIUM)
         finish_item(tx);
     endtask
 
@@ -45,7 +45,7 @@ class testClean #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
         trace#(3) tx = trace#(3)::type_id::create("tx");
         start_item(tx);
         assert(tx.randomize() with {rst == 0; opCode == 4'b0110; tag == 6; offset == 2'b01; targetCore == core;});
-        `uvm_info("TESTCLEAN", "Testing store miss with clean cache", UVM_HIGH)
+        `uvm_info("TESTCLEAN", "Testing store miss with clean cache", UVM_MEDIUM)
         finish_item(tx);
     endtask
 

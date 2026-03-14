@@ -11,10 +11,12 @@ class fillDirty #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     logic [corewidth:0] targ;
 
     task body();
+        `uvm_info("DRTFIL", "Making cache dirty", UVM_MEDIUM)
         for (targ = 0; targ < CORES; targ++) begin
             #10;
             fill(targ);
         end
+        `uvm_info("DRTFIL", "Made cache dirty", UVM_MEDIUM)
     endtask
 
     task fill(logic [corewidth-1:0] target);
@@ -22,11 +24,10 @@ class fillDirty #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
             for (j=0; j < 4; j++) begin
                 trace#(3) tx = trace#(3)::type_id::create("tx");
                 start_item(tx);
-                assert(tx.randomize() with {rst == 0; opCode == 4'b0110; index == i; tag == j; offset == 2'b01; targetCore == target;});
+                assert(tx.randomize() with {rst == 0; opCode == 4'b0110; index == i; tag == j; targetCore == target;});
                 finish_item(tx);
             end
         end
-        `uvm_info("DRTFIL", "Making cache dirty", UVM_HIGH)
     endtask
 
 endclass

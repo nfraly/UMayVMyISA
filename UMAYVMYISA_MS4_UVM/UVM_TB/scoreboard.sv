@@ -143,8 +143,8 @@ class scoreboard extends uvm_scoreboard;
                 end
 
                 if (has_x8(store_data)) begin
-                    `uvm_error("Compare", $sformatf("STORE data has X core=%0d addr=0x%03h data=%h",
-                        testObject.targetCore, act_addr, store_data))
+                    `uvm_error("Compare", $sformatf("STORE data has X core=%0d addr=0x%03h data=%h tag=0x%06h index=0x%03h offset=0x%02h",
+                        testObject.targetCore, act_addr, store_data, act_addr[10:5], act_addr[4:2], act_addr[1:0]))
                     return;
                 end
 

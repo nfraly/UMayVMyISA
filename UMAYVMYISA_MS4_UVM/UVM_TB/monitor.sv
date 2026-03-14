@@ -84,6 +84,7 @@ class monitor extends uvm_monitor;
                             (4'b1101): begin //all ALU op codes; 6 cycles (1 cycle after instruction grab operands, 5 cycles later we are done and can grab result)
                                 `uvm_info("MONITOR", $sformatf("Found an ALU op code, instr_ready is %b", vif.instr_ready), UVM_HIGH)
                                 @(posedge vif.clk);
+                                core_capture_busy[core_idx] = '0;
                                 testObj.aluA = vif.core_rf_rdata_a_dbg[worker_core_idx];
                                 testObj.aluB = vif.core_rf_rdata_b_dbg[worker_core_idx];
                                 repeat (5) @(posedge vif.clk);
