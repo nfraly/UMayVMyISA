@@ -13,6 +13,7 @@ class coreTest extends uvm_test;
     fillDirty#(3) fillDirtySeq;
     testDirty#(3) testDirtySeq;
     resetSequence#(3) resetSeq;
+    randSequence#(3) randSeq; 
     virtual intf vif;
 
     function void build_phase(uvm_phase phase);
@@ -49,6 +50,11 @@ class coreTest extends uvm_test;
         //fillDirtySeq.start(e0.a0.s0);
         testDirtySeq = testDirty#(3)::type_id::create("testDirtySeq");
         testDirtySeq.start(e0.a0.s0);
+
+        randSeq = randSequence#(3)::type_id::create("randSeq");
+        repeat(1000) begin
+            randSeq.start(e0.a0.s0);
+        end
         #2000;
         phase.drop_objection(this);
     endtask
