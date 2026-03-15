@@ -32,6 +32,11 @@ class coreTest extends uvm_test;
         `uvm_info("TEST", "Test connect phase", UVM_HIGH)
     endfunction
 
+    function void start_of_simulation_phase(uvm_phase phase);
+        super.start_of_simulation_phase(phase);
+        `uvm_info("SIM_START", ascii_banner(), UVM_NONE)
+    endfunction
+
     task run_phase(uvm_phase phase);
         super.run_phase(phase);
         `uvm_info("TEST", "Test run phase", UVM_HIGH)
@@ -49,8 +54,28 @@ class coreTest extends uvm_test;
         fillDirtySeq.start(e0.a0.s0);
         testDirtySeq = testDirty#(3)::type_id::create("testDirtySeq");
         testDirtySeq.start(e0.a0.s0);
-        #8000;
+        randSeq = randSequence#(3)::type_id::create("randSeq");
+        repeat(1000) begin
+            randSeq.start(e0.a0.s0);
+        end
+        #2000;
         phase.drop_objection(this);
     endtask
+
+    function string ascii_banner();
+        string banner;
+        banner = {
+			"\n",
+			"==============================================================\n",
+			"| U   U M   M   A   Y   Y V   V M   M Y   Y III  SSSS   A    |\n",
+			"| U   U MM MM  A A   Y Y  V   V MM MM  Y Y   I  S      A A   |\n",
+			"| U   U M M M AAAAA   Y   V   V M M M   Y    I   SSS  AAAAA  |\n",
+			"| U   U M   M A   A   Y    V V  M   M   Y    I      S A   A  |\n",
+			"|  UUU  M   M A   A   Y     V   M   M   Y   III SSSS  A   A  |\n",
+			"==============================================================\n",
+			"\n"
+        };
+        return banner;
+    endfunction: ascii_banner
 
 endclass

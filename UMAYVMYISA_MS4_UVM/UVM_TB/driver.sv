@@ -35,9 +35,7 @@ class driver extends uvm_driver #(trace#(3));
 
 
         forever begin
-            `uvm_info ("DRIVER", $sformatf ("Waiting for data from sequencer"), UVM_HIGH)
             seq_item_port.get_next_item (testObj);
-            `uvm_info ("DRIVER", $sformatf ("About to drive an item"), UVM_HIGH)
             drive_item (testObj);
             $swriteh(tmp_string,"%p",testObj.instruction);
             `uvm_info ("DRIVER", $sformatf ("Drove an item 0X%p", tmp_string), UVM_HIGH)
@@ -54,7 +52,6 @@ class driver extends uvm_driver #(trace#(3));
         vif.instr_core_sel <= testObj.targetCore;
         vif.instr_word <= testObj.instruction;
         vif.instr_valid <= 1'b1;
-        //`uvm_info("DRIVER", "Releasing instr_valid", UVM_HIGH)
         @(posedge vif.clk);
         vif.instr_valid <= 1'b0;
     endtask
