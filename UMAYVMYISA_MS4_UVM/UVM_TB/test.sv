@@ -13,6 +13,7 @@ class coreTest extends uvm_test;
     fillDirty#(3) fillDirtySeq;
     testDirty#(3) testDirtySeq;
     resetSequence#(3) resetSeq;
+    randSequence#(3) randSeq;
     virtual intf vif;
 
     function void build_phase(uvm_phase phase);
