@@ -99,14 +99,15 @@ class monitor extends uvm_monitor;
                                     cyc++;
                                     `uvm_info("MONITOR", $sformatf("bus shows address %b", vif.core_iu_mem_addr_dbg[worker_core_idx]), UVM_HIGH)
 
-                                    if (!got_addr && vif.core_iu_mem_req_dbg[worker_core_idx] && !vif.core_iu_mem_we_dbg[worker_core_idx]) begin
-                                        testObj.address = vif.core_iu_mem_addr_dbg[worker_core_idx];
+                                    if (!got_addr && vif.core_iu_mem_req_dbg[testObj.targetCore] && !vif.core_iu_mem_we_dbg[testObj.targetCore]) begin
+                                        testObj.address = vif.core_iu_mem_addr_dbg[testObj.targetCore];
                                         got_addr = 1'b1;
                                     end
-                                    if (vif.core_rf_wen_dbg[worker_core_idx]) begin
-                                        testObj.result = vif.core_rf_wdata_dbg[worker_core_idx];
-                                        testObj.register = vif.core_rf_waddr_dbg[worker_core_idx];
+                                    if (vif.core_rf_wen_dbg[testObj.targetCore]) begin
+                                        testObj.result = vif.core_rf_wdata_dbg[testObj.targetCore];
+                                        testObj.register = vif.core_rf_waddr_dbg[testObj.targetCore];
                                         `uvm_info("MONITOR", $sformatf("Found a LOAD opcode, sending data %X and register %d to scoreboard", testObj.result, testObj.register), UVM_HIGH)
+                                        `uvm_info("MONITOR", $sformatf("Load instruction: Register = %d Address = %h Instruction = %h",testObj.register, testObj.address, testObj.instruction), UVM_MEDIUM)
                                         break;
                                     end
                                     if (cyc > 120) begin
@@ -134,6 +135,7 @@ class monitor extends uvm_monitor;
                                     end
                                     if (got_addr && (vif.core_iu_mem_done_dbg[worker_core_idx] || !vif.core_iu_mem_req_dbg[worker_core_idx])) begin
                                         `uvm_info("MONITOR", $sformatf("Found a STORE opcode, sending address %X and data %d to scoreboard", testObj.address, testObj.memData), UVM_HIGH)
+                                        `uvm_info("MONITOR", $sformatf("Store instruction: Register = %d Address = %h Instruction = %h",testObj.instruction[27:23], testObj.address, testObj.instruction), UVM_MEDIUM)
                                         break;
                                     end
                                     if (cyc > 120) begin

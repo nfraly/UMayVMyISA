@@ -123,8 +123,8 @@ class scoreboard extends uvm_scoreboard;
 
                 exp_data = shadow_mem[load_addr];
                 if (act_data !== exp_data) begin
-                    `uvm_error("Compare", $sformatf("LOAD data mismatch core=%0d addr=0x%03h actual=%02h expected=%02h",
-                        testObject.targetCore, load_addr, act_data, exp_data))
+                    `uvm_error("Compare", $sformatf("LOAD data mismatch core=%0d addr=0x%03h register=%d actual=%02h expected=%02h instruction=%0h tag=%0h index=%0h offest=%0h",
+                        testObject.targetCore, load_addr, act_rd, act_data, exp_data, testObject.instruction, load_addr[10:5], load_addr[4:2], load_addr[1:0]))
                 end
                 else begin
                     `uvm_info("Compare", $sformatf("LOAD data pass core=%0d addr=0x%03h data=%02h",

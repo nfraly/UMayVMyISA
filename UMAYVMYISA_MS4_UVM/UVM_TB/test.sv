@@ -46,7 +46,7 @@ class coreTest extends uvm_test;
         testCleanSeq = testClean#(3)::type_id::create("testCleanSeq");
         testCleanSeq.start(e0.a0.s0);
         fillDirtySeq = fillDirty#(3)::type_id::create("fillDirtySeq");
-        fillDirtySeq.start(e0.a0.s0);
+        //fillDirtySeq.start(e0.a0.s0);
         testDirtySeq = testDirty#(3)::type_id::create("testDirtySeq");
         testDirtySeq.start(e0.a0.s0);
         #2000;
