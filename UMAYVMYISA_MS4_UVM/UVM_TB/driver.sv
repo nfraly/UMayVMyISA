@@ -47,14 +47,14 @@ class driver extends uvm_driver #(trace#(3));
     endtask
 
     task drive_item (trace#(3) testObj);
-        `uvm_info ("DRIVER", $sformatf ("Driving an item on core %d", testObj.targetCore), UVM_HIGH)
+        `uvm_info ("driver", $sformatf ("Driving an item on core %d", testObj.targetCore), UVM_HIGH)
         vif.rst = testObj.rst;
         @(posedge vif.clk);
         wait (vif.core_ready_vec[testObj.targetCore]);
         vif.instr_core_sel <= testObj.targetCore;
         vif.instr_word <= testObj.instruction;
         vif.instr_valid <= 1'b1;
-        `uvm_info("DRIVER", "Releasing instr_valid", UVM_HIGH)
+        //`uvm_info("DRIVER", "Releasing instr_valid", UVM_HIGH)
         @(posedge vif.clk);
         vif.instr_valid <= 1'b0;
     endtask

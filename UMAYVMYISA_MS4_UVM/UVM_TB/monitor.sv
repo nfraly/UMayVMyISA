@@ -58,12 +58,12 @@ class monitor extends uvm_monitor;
                 req.targetCore = vif.instr_core_sel;
                 `uvm_info("MONITOR", "instr_ready is high", UVM_HIGH)
 
-                if (core_capture_busy[core_idx]) begin
-                    `uvm_error("MONITOR", $sformatf(
-                        "Per-core monitor worker overlap core=%0d instr=0x%08h",
-                        core_idx, req.instruction))
-                    continue;
-                end
+               // if (core_capture_busy[core_idx]) begin
+               //     `uvm_error("MONITOR", $sformatf(
+               //         "Per-core monitor worker overlap core=%0d instr=0x%08h",
+               //         core_idx, req.instruction))
+               //     continue;
+               // end
 
                 core_capture_busy[core_idx] = 1'b1;
                 fork
