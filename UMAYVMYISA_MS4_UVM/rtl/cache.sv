@@ -24,6 +24,7 @@ module cache (
   output logic snoop_req_cmd,
   input logic snoop_req_grant,
   input logic snoop_req_done,
+  input logic snoop_block_new_req,
   output logic snoop_proc_busy
 );
 
@@ -39,6 +40,8 @@ module cache (
   localparam int INDEX_W  = (SETS <= 1) ? 1 : $clog2(SETS);
   localparam int TAG_W    = ADDR_W - INDEX_W - OFFSET_W;
   localparam int WAY_W    = (WAYS <= 1) ? 1 : $clog2(WAYS);
+  localparam int SNOOP_WAIT_TIMEOUT = 120;
+  localparam int SNOOP_WAIT_COUNT_W = (SNOOP_WAIT_TIMEOUT <= 1) ? 1 : $clog2(SNOOP_WAIT_TIMEOUT + 1);
 
   typedef enum logic [3:0] {
     IDLE, LOOKUP, WB_SEND, WB_WAIT, FETCH_LINE, FETCH_WAIT,
@@ -101,25 +104,30 @@ module cache (
   logic [7:0] resp_data;
 
   logic [1:0] core_id_snoopbus;
+  logic [SNOOP_WAIT_COUNT_W-1:0] snoop_wait_counter;
+  logic snoop_wait_timed_out;
+  logic read_miss_shared;
 
   // Request/response handshakes
-  wire accept_miu_req = (state == IDLE) && !need_snoop_req && miu_if.cache_req_valid && miu_if.cache_req_ready;
+  wire accept_miu_req = (state == IDLE) && !need_snoop_req && !snoop_block_new_req && miu_if.cache_req_valid && miu_if.cache_req_ready;
 
   wire accept_mem_req = (state inside {WB_SEND, FETCH_LINE, SNOOP_WB_SEND}) && mem_if.mem_req_valid && mem_if.mem_req_ready;
 
   wire got_mem_resp = (state inside {WB_WAIT, FETCH_WAIT, SNOOP_WB_WAIT}) && mem_if.mem_resp_valid;
 
   // MIU side
-  assign miu_if.cache_req_ready = (state == IDLE) && !need_snoop_req && !snoop_pending;
+  assign miu_if.cache_req_ready = (state == IDLE) && !need_snoop_req && !snoop_pending && !snoop_block_new_req;
   assign miu_if.cache_resp_valid = resp_valid;
   assign miu_if.cache_resp_data = resp_data;
   assign snoop_req_valid = need_snoop_req;
   assign snoop_req_addr = snoop_req_addr_int;
   assign snoop_req_cmd = snoop_req_cmd_int;
-  assign snoop_proc_busy = snoop_pending || (state inside {SNOOP_WB_SEND, SNOOP_WB_WAIT});
+  // Commenting out snoop_pending || 
+  assign snoop_proc_busy = (state inside {SNOOP_WB_SEND, SNOOP_WB_WAIT});
   assign core_id_snoopbus = CORE_ID[1:0];
   assign snoop_pending_idx = snoop_pending_addr[OFFSET_W+INDEX_W-1:OFFSET_W];
   assign snoop_pending_tag = snoop_pending_addr[ADDR_W-1:OFFSET_W+INDEX_W];
+  assign snoop_wait_timed_out = (snoop_wait_counter == SNOOP_WAIT_TIMEOUT[SNOOP_WAIT_COUNT_W-1:0]);
 
   function automatic logic [WAY_W-1:0] choose_victim(
     input logic [WAYS-1:0] set_valid,
@@ -240,6 +248,8 @@ module cache (
       snoop_tag <= '0;
       snoop_wb_offset <= '0;
       snoop_post_inval <= 1'b0;
+      snoop_wait_counter <= '0;
+      read_miss_shared <= 1'b0;
 
       resp_valid <= 1'b0;
       resp_data <= '0;
@@ -266,6 +276,15 @@ module cache (
       // Snoop request to arbiter is level-based until granted
       if (need_snoop_req && snoop_req_grant) begin
         need_snoop_req <= 1'b0;
+      end
+
+      if (state inside {SNOOP_WAIT_GRANT, SNOOP_WAIT_DONE, SNOOP_WAIT_STORE_DONE}) begin
+        if (!snoop_wait_timed_out) begin
+	  snoop_wait_counter <= snoop_wait_counter + 1;
+	end
+      end
+      else begin
+        snoop_wait_counter <= '0;
       end
 
       // Queue snoops even while busy so they are not dropped
@@ -327,6 +346,7 @@ module cache (
             req_offset <= miu_if.cache_req_addr[OFFSET_W-1:0];
             req_idx <= miu_if.cache_req_addr[OFFSET_W+INDEX_W-1:OFFSET_W];
             req_tag <= miu_if.cache_req_addr[ADDR_W-1:OFFSET_W+INDEX_W];
+	    read_miss_shared <= 0;
 
             if (miu_if.cache_req_we) begin
               // Store requests issue RFO on snoop bus
@@ -397,6 +417,12 @@ module cache (
             end
             else state <= SNOOP_WAIT_DONE;
           end
+  	  else if (snoop_wait_timed_out) begin
+	    need_snoop_req <= 1'b0;
+	    
+	    if (victim_valid && victim_dirty) state <= WB_SEND;
+	    else			      state <= FETCH_LINE;
+	  end
         end
 
         SNOOP_WAIT_DONE: begin
@@ -405,6 +431,10 @@ module cache (
             if (victim_valid && victim_dirty) state <= WB_SEND;
             else                              state <= FETCH_LINE;
           end
+	  else if (snoop_wait_timed_out) begin
+	    if (victim_valid && victim_dirty) state <= WB_SEND;
+	    else			      state <= FETCH_LINE;
+	  end
         end
 
         WB_SEND: if (accept_mem_req) state <= WB_WAIT;
@@ -477,6 +507,12 @@ module cache (
             resp_valid <= 1'b1;
             state <= IDLE;
           end
+	  else if (snoop_wait_timed_out) begin
+	    need_snoop_req <= 1'b0;
+	    resp_data <= 8'h00;
+	    resp_valid <= 1'b1;
+	    state <= IDLE;
+	  end
         end
 
         SNOOP_WB_SEND: begin

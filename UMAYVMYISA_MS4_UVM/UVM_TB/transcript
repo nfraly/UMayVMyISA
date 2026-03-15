@@ -1,0 +1,131 @@
+# vsim -c top "+INIT_MEM_FILE=rtl/init_memory" -do "run -all" 
+# Start time: 19:21:32 on Mar 14,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# //  Questa Sim-64
+# //  Version 2024.2 linux_x86_64 May 20 2024
+# //
+# // Unpublished work. Copyright 2024 Siemens
+# //
+# // This material contains trade secrets or otherwise confidential information
+# // owned by Siemens Industry Software Inc. or its affiliates (collectively,
+# // "SISW"), or its licensors. Access to and use of this information is strictly
+# // limited as set forth in the Customer's applicable agreements with SISW.
+# //
+# // This material may not be copied, distributed, or otherwise disclosed outside
+# // of the Customer's facilities without the express written permission of SISW,
+# // and may not be used in any way not expressly authorized by SISW.
+# //
+# Loading sv_std.std
+# Loading work.system_widths_pkg(fast)
+# Loading work.memory_sv_unit(fast)
+# Loading work.mp_system_sv_unit(fast)
+# Loading work.interfaces_sv_unit(fast)
+# Loading work.mp_top_sv_unit(fast)
+# Loading work.intf(fast)
+# Loading mtiUvm.uvm_pkg(fast)
+# Loading work.test_top_sv_unit(fast)
+# Loading mtiUvm.questa_uvm_pkg(fast)
+# Loading work.top(fast)
+# Loading work.miu_sv_unit(fast)
+# Loading work.miu(fast)
+# Loading work.cache_sv_unit(fast)
+# Loading work.cache(fast)
+# Loading work.cache(fast__1)
+# Loading work.cache(fast__2)
+# Loading work.mem_arbiter_sv_unit(fast)
+# Loading work.mem_arbiter(fast)
+# Loading work.opcode_pkg(fast)
+# Loading work.special_functions_sv_unit(fast)
+# Loading work.alu_sv_unit(fast)
+# Loading work.regfile_sv_unit(fast)
+# Loading work.iu_sv_unit(fast)
+# Loading work.core_sv_unit(fast)
+# Loading work.core(fast)
+# Loading work.core(fast__1)
+# Loading work.core(fast__2)
+# Loading work.cache_mem_if(fast__1)
+# Loading /pkgs/mentor/questa/2024.2/questasim/uvm-1.1d/linux_x86_64/uvm_dpi.so
+# run -all
+# ----------------------------------------------------------------
+# UVM-1.1d
+# (C) 2007-2013 Mentor Graphics Corporation
+# (C) 2007-2013 Cadence Design Systems, Inc.
+# (C) 2006-2013 Synopsys, Inc.
+# (C) 2011-2013 Cypress Semiconductor Corp.
+# ----------------------------------------------------------------
+# 
+#   ***********       IMPORTANT RELEASE NOTES         ************
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_NO_DEPRECATED undefined.
+#   See http://www.eda.org/svdb/view.php?id=3313 for more details.
+# 
+#   You are using a version of the UVM library that has been compiled
+#   with `UVM_OBJECT_MUST_HAVE_CONSTRUCTOR undefined.
+#   See http://www.eda.org/svdb/view.php?id=3770 for more details.
+# 
+#       (Specify +UVM_NO_RELNOTES to turn off this notice)
+# 
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(277) @ 0: reporter [Questa UVM] QUESTA_UVM-1.2.3
+# UVM_INFO verilog_src/questa_uvm_pkg-1.2/src/questa_uvm_pkg.sv(278) @ 0: reporter [Questa UVM]  questa_uvm::init(+struct)
+# UVM_INFO @ 0: reporter [RNTST] Running test coreTest...
+# UVM_INFO driver.sv(13) @ 0: uvm_test_top.e0.a0.d0 [DRIVER] Constructing Driver
+# UVM_INFO driver.sv(20) @ 0: uvm_test_top.e0.a0.d0 [DRIVER] Driver Build_phase
+# UVM_INFO driver.sv(28) @ 0: uvm_test_top.e0.a0.d0 [DRIVER] Driver Connect_phase
+# UVM_INFO @ 0: reporter [UVMTOP] UVM testbench topology:
+# ---------------------------------------------------------------
+# Name                        Type                    Size  Value
+# ---------------------------------------------------------------
+# uvm_test_top                coreTest                -     @471 
+#   e0                        env                     -     @478 
+#     a0                      coreAgent               -     @485 
+#       d0                    driver                  -     @609 
+#         rsp_port            uvm_analysis_port       -     @624 
+#         seq_item_port       uvm_seq_item_pull_port  -     @616 
+#       m0                    monitor                 -     @632 
+#         mon_analaysis_port  uvm_analysis_port       -     @644 
+#       s0                    sequencer               -     @500 
+#         rsp_export          uvm_analysis_export     -     @507 
+#         seq_item_export     uvm_seq_item_pull_imp   -     @601 
+#         arbitration_queue   array                   0     -    
+#         lock_queue          array                   0     -    
+#         num_last_reqs       integral                32    'd1  
+#         num_last_rsps       integral                32    'd1  
+#     s0                      scoreboard              -     @492 
+#       scb_port              uvm_analysis_imp        -     @658 
+# ---------------------------------------------------------------
+# 
+# UVM_INFO monitor.sv(37) @ 0: uvm_test_top.e0.a0.m0 [MONITOR] Monitor run phase [MON_V_PERCORE_OVERLAP_20260313]
+# UVM_INFO driver.sv(34) @ 0: uvm_test_top.e0.a0.d0 [DRIVER] Driver Run_phase
+# UVM_INFO fillClean.sv(18) @ 1575: uvm_test_top.e0.a0.s0@@fillCleanSeq [FILLCLEAN] Making cache clean core 0
+# UVM_INFO fillClean.sv(21) @ 9355: uvm_test_top.e0.a0.s0@@fillCleanSeq [FILLCLEAN] Making cache clean core 1
+# UVM_INFO fillClean.sv(24) @ 17175: uvm_test_top.e0.a0.s0@@fillCleanSeq [FILLCLEAN] Making cache clean core 2
+# UVM_INFO fillClean.sv(27) @ 24995: uvm_test_top.e0.a0.s0@@fillCleanSeq [FILLCLEAN] Made cache clean
+# UVM_INFO testClean.sv(53) @ 24995: uvm_test_top.e0.a0.s0@@testCleanSeq [TESTCLEAN] Testing store hit with clean cache
+# UVM_INFO testClean.sv(53) @ 25015: uvm_test_top.e0.a0.s0@@testCleanSeq [TESTCLEAN] Testing store hit with clean cache
+# UVM_INFO testClean.sv(53) @ 25035: uvm_test_top.e0.a0.s0@@testCleanSeq [TESTCLEAN] Testing store hit with clean cache
+# UVM_INFO fillDirty.sv(14) @ 25235: uvm_test_top.e0.a0.s0@@fillDirtySeq [DRTFIL] Making cache dirty
+# UVM_INFO fillDirty.sv(37) @ 54385: uvm_test_top.e0.a0.s0@@fillDirtySeq [DRTFIL] Made cache dirty
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1267) @ 59415: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# 
+# --- UVM Report Summary ---
+# 
+# ** Report counts by severity
+# UVM_INFO :   19
+# UVM_WARNING :    0
+# UVM_ERROR :    0
+# UVM_FATAL :    0
+# ** Report counts by id
+# [DRIVER]     4
+# [DRTFIL]     2
+# [FILLCLEAN]     4
+# [MONITOR]     1
+# [Questa UVM]     2
+# [RNTST]     1
+# [TESTCLEAN]     3
+# [TEST_DONE]     1
+# [UVMTOP]     1
+# ** Note: $finish    : /pkgs/mentor/questa/2024.2/questasim/linux_x86_64/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
+#    Time: 59415 ns  Iteration: 54  Instance: /top
+# End time: 19:21:37 on Mar 14,2026, Elapsed time: 0:00:05
+# Errors: 0, Warnings: 0

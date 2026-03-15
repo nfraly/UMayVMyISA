@@ -1,0 +1,7 @@
+# vsim -c top "+UVM_TESTNAME=coreTest" "+UVM_VERBOSITY=UVM_HIGH" -do "run -all;" 
+# Start time: 17:10:40 on Mar 14,2026
+# ** Error (suppressible): (vsim-19) Failed to access library 'work' at "work".
+# No such file or directory. (errno = ENOENT)
+# Error loading design
+# End time: 17:10:40 on Mar 14,2026, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0

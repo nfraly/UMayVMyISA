@@ -20,12 +20,17 @@ class scoreboard extends uvm_scoreboard;
     endfunction
 
     function void build_phase(uvm_phase phase);
+	string init_path;
         super.build_phase(phase);
         scb_port = new("scb_port", this);
         for (int i = 0; i < MEM_DEPTH; ++i) begin
             shadow_mem[i] = '0;
-            shadow_valid[i] = 1'b0;
+            shadow_valid[i] = 1'b1; //adjusting 1'b0 to all bits set
         end
+
+	if (!$value$plusargs("INIT_MEM_FILE=%s", init_path)) init_path = "../rtl/init_memory";
+
+	$readmemh(init_path, shadow_mem);
         `uvm_info("SCB_CLASS", "Build Phase", UVM_HIGH)
     endfunction
 

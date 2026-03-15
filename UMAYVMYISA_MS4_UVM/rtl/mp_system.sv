@@ -41,6 +41,7 @@ module mp_system #(parameter int N = 3) (
   logic [N-1:0]               snoop_req_done;
   logic [N-1:0]               snoop_proc_busy;
   logic [N-1:0]               snoop_grant_1hot;
+  logic [N-1:0]		      snoop_block_new_req;
   logic                       snoop_any;
   logic [$clog2(N)-1:0]       snoop_grant_idx;
   logic [$clog2(N)-1:0]       snoop_rr_ptr;
@@ -93,6 +94,18 @@ module mp_system #(parameter int N = 3) (
     for (int i = 0; i < N; ++i) begin
       if ((snoop_txn_active) && (i[$clog2(N)-1:0] != snoop_txn_owner) && snoop_proc_busy[i]) begin
         snoop_peers_idle = 1'b0;
+      end
+    end
+  end
+
+  // Block others while a core's snoop is active
+  always_comb begin
+    snoop_block_new_req = '0;
+    if (snoop_txn_active) begin
+      for (int i = 0; i < N; ++i) begin
+	if (i[$clog2(N)-1:0] != snoop_txn_owner) begin
+	  snoop_block_new_req[i] = 1'b1;
+	end
       end
     end
   end
@@ -153,7 +166,8 @@ module mp_system #(parameter int N = 3) (
         .snoop_req_cmd(snoop_req_cmd[g]),
         .snoop_req_grant(snoop_req_grant[g]),
         .snoop_req_done(snoop_req_done[g]),
-        .snoop_proc_busy(snoop_proc_busy[g])
+        .snoop_proc_busy(snoop_proc_busy[g]),
+	.snoop_block_new_req(snoop_block_new_req[g])
       );
 
       // Per-core debug taps at cache->arbiter boundary

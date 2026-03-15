@@ -70,8 +70,18 @@ module top;
     
     initial begin
         clk = 0;
+	vif.rst = 1'b1;
+	vif.instr_valid = 1'b0;
+	vif.instr_word = '0;
+	vif.instr_core_sel = '0;
+
         uvm_config_db #(virtual intf)::set(null, "*", "vif", vif);
         run_test("coreTest");
+    end
+
+    initial begin 
+	    repeat (3) @(posedge clk);
+	    vif.rst = 1'b0;
     end
     
     initial begin

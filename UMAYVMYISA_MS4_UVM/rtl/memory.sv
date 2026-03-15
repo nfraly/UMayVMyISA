@@ -24,8 +24,11 @@ module memory (
 
   // 1 cycle response for Loads/Stores
   always_ff @(posedge clk or negedge resetN) begin
+    string init_path;
     if (!resetN) begin
-      $readmemh("../rtl/init_memory", memory_size);
+      for (int i = 0; i < DEPTH; ++i) memory_size[i] = 8'h00;
+      if (!$value$plusargs("INIT_MEM_FILE=%s", init_path)) init_path = "/init_memory";
+      $readmemh(init_path, memory_size);
       resp_data_r <= '0;
       resp_valid_r <= 0;
     end

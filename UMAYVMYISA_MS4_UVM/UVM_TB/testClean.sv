@@ -9,12 +9,25 @@ class testClean #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     logic [corewidth:0] core;
 
     task body();
+
+/*
         for (core = 0; core < CORES; core++) begin
-            //loadHit(core);
-            //loadMiss(core);
-            //storeHit(core);
+            loadHit(core);
+            loadMiss(core);
+            storeHit(core);
             storeMiss(core);
         end
+*/
+	//storeHit(0); loadHit(0);
+	//storeHit(1); loadHit(1);
+	//storeHit(2); loadHit(2);
+
+	storeHit(0); storeHit(1); storeHit(2);	
+	//loadHit(0); loadHit(1); loadHit(2);
+
+
+
+
     endtask
 
     task loadHit(logic [corewidth:0] core);
