@@ -99,7 +99,7 @@ class scoreboard extends uvm_scoreboard;
                 act_data = testObject.result[7:0];
 
                 if (act_rd !== exp_rd) begin
-                    `uvm_error("Compare", $sformatf("LOAD rd mismatch core=%0d addr=0x%03h actual_rd=%0d expected_rd=%0d",
+                    `uvm_error("Compare", $sformatf("FAIL: LOAD rd mismatch core=%0d addr=0x%03h actual_rd=%0d expected_rd=%0d",
                         testObject.targetCore, load_addr, act_rd, exp_rd))
                     return;
                 end
@@ -111,14 +111,14 @@ class scoreboard extends uvm_scoreboard;
                 end
 
                 if (has_x8(act_data)) begin
-                    `uvm_error("Compare", $sformatf("LOAD data has X core=%0d addr=0x%03h data=%h",
+                    `uvm_error("Compare", $sformatf("FAIL: LOAD data has X core=%0d addr=0x%03h data=%h",
                         testObject.targetCore, load_addr, act_data))
                     return;
                 end
 
                 exp_data = shadow_mem[load_addr];
                 if (act_data !== exp_data) begin
-                    `uvm_error("Compare", $sformatf("LOAD data mismatch core=%0d addr=0x%03h actual=%02h expected=%02h",
+                    `uvm_error("Compare", $sformatf("FAIL: LOAD data mismatch core=%0d addr=0x%03h actual=%02h expected=%02h",
                         testObject.targetCore, load_addr, act_data, exp_data))
                 end
                 else begin
@@ -137,13 +137,13 @@ class scoreboard extends uvm_scoreboard;
                 store_data = testObject.memData[7:0];
 
                 if (act_addr !== exp_addr) begin
-                    `uvm_error("Compare", $sformatf("STORE addr mismatch core=%0d actual=0x%03h expected=0x%03h",
+                    `uvm_error("Compare", $sformatf("FAIL: STORE addr mismatch core=%0d actual=0x%03h expected=0x%03h",
                         testObject.targetCore, act_addr, exp_addr))
                     return;
                 end
 
                 if (has_x8(store_data)) begin
-                    `uvm_error("Compare", $sformatf("STORE data has X core=%0d addr=0x%03h data=%h tag=0x%06h index=0x%03h offset=0x%02h",
+                    `uvm_error("Compare", $sformatf("FAIL: STORE data has X core=%0d addr=0x%03h data=%h tag=0x%06h index=0x%03h offset=0x%02h",
                         testObject.targetCore, act_addr, store_data, act_addr[10:5], act_addr[4:2], act_addr[1:0]))
                     return;
                 end
@@ -184,7 +184,7 @@ class scoreboard extends uvm_scoreboard;
             end
             4'b1100: begin//3A
                 A=testObject.aluA;
-                expected = 3*A;
+                expected = 2*A + A;
                 actual = testObject.result;
             end
             4'b1101: begin//AB+B
@@ -199,10 +199,10 @@ class scoreboard extends uvm_scoreboard;
             end
         endcase
         if (actual !== expected) begin
-            `uvm_error("Compare", $sformatf("Transaction failed! opCode: %b Actual %b expected %b", testObject.opCode ,actual, expected))
+            `uvm_error("Compare", $sformatf("Transaction failed! opCode: %b Actual %d expected %d A: %d, B: %d", testObject.opCode ,actual, expected, A, B))
         end
         else begin
-            `uvm_info("Compare", $sformatf("Transaction passed: Actual: %b Expected: %b", actual, expected), UVM_HIGH)
+            `uvm_info("Compare", $sformatf("Transaction passed: Actual: %d Expected: %d", actual, expected), UVM_MEDIUM)
         end
     endtask
         

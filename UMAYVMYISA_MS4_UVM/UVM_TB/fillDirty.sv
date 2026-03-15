@@ -13,7 +13,6 @@ class fillDirty #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     task body();
         `uvm_info("DRTFIL", "Making cache dirty", UVM_MEDIUM)
         for (targ = 0; targ < CORES; targ++) begin
-            #10;
             fill(targ);
         end
         `uvm_info("DRTFIL", "Made cache dirty", UVM_MEDIUM)

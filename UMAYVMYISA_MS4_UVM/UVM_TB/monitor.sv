@@ -37,7 +37,7 @@ class monitor extends uvm_monitor;
         `uvm_info("MONITOR", "Monitor run phase [MON_V_PERCORE_OVERLAP_20260313]", UVM_NONE)
         forever begin
             @(posedge vif.clk);
-            `uvm_info("MONITOR", "Waiting for instr_ready", UVM_HIGH)
+            //`uvm_info("MONITOR", "Waiting for instr_ready", UVM_HIGH)
             if ((vif.instr_ready && vif.instr_valid && !vif.rst)) begin
                 trace#(3) req;
                 int core_idx;
@@ -56,7 +56,7 @@ class monitor extends uvm_monitor;
                 req.instruction = vif.instr_word;
                 req.opCode = vif.instr_word[31:28];
                 req.targetCore = vif.instr_core_sel;
-                `uvm_info("MONITOR", "instr_ready is high", UVM_HIGH)
+                //`uvm_info("MONITOR", "instr_ready is high", UVM_HIGH)
 
                 if (core_capture_busy[core_idx]) begin
                     `uvm_error("MONITOR", $sformatf(
@@ -97,7 +97,7 @@ class monitor extends uvm_monitor;
                                 forever begin
                                     @(posedge vif.clk);
                                     cyc++;
-                                    `uvm_info("MONITOR", $sformatf("bus shows address %b", vif.core_iu_mem_addr_dbg[worker_core_idx]), UVM_HIGH)
+                                    //`uvm_info("MONITOR", $sformatf("bus shows address %b", vif.core_iu_mem_addr_dbg[worker_core_idx]), UVM_HIGH)
 
                                     if (!got_addr && vif.core_iu_mem_req_dbg[worker_core_idx] && !vif.core_iu_mem_we_dbg[worker_core_idx]) begin
                                         testObj.address = vif.core_iu_mem_addr_dbg[worker_core_idx];
@@ -124,7 +124,7 @@ class monitor extends uvm_monitor;
                                 forever begin
                                     @(posedge vif.clk);
                                     cyc++;
-                                    `uvm_info("MONITOR", $sformatf("bus shows address %b", vif.core_iu_mem_addr_dbg[worker_core_idx]), UVM_HIGH)
+                                    //`uvm_info("MONITOR", $sformatf("bus shows address %b", vif.core_iu_mem_addr_dbg[worker_core_idx]), UVM_HIGH)
 
                                     if (!got_addr && vif.core_iu_mem_req_dbg[worker_core_idx] && vif.core_iu_mem_we_dbg[worker_core_idx]) begin
                                         testObj.address = vif.core_iu_mem_addr_dbg[worker_core_idx];

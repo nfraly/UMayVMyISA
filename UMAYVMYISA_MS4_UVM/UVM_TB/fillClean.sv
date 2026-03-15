@@ -17,13 +17,10 @@ class fillClean #(parameter CORES = 3) extends uvm_sequence#(trace#(3));
     task body();
         `uvm_info("FILLCLEAN", "Making cache clean core 0", UVM_MEDIUM)
             fillCleanTask(0);
-            #10;
         `uvm_info("FILLCLEAN", "Making cache clean core 1", UVM_MEDIUM)
             fillCleanTask(1);
-            #10;
         `uvm_info("FILLCLEAN", "Making cache clean core 2", UVM_MEDIUM)
             fillCleanTask(2);
-            #10;
         `uvm_info("FILLCLEAN", "Made cache clean", UVM_MEDIUM)
     endtask
 
