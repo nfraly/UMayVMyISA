@@ -75,13 +75,25 @@ module mem_arbiter #(parameter int N = 3) (
   // Used to mux the granted cache request onto arbiter_to_mem 
   logic [$clog2(N)-1:0] sel_index;
   assign sel_index = onehot_to_index(grant_signal);
+  logic [$clog2(N)-1:0] arb_owner_sel;
+
+  // Bug injection: Pin arbiter to core 0, starving others
+  `ifdef BUG_ARBITER_PIN_CORE0
+     assign arb_owner_sel = '0;
+  `else
+     assign arb_owner_sel = sel_index;
+  `endif 
 
   // Drive granted request onto memory port if not busy
   always_comb begin
+  `ifdef BUG_ARBITER_PIN_CORE0
+    arbiter_to_mem.mem_req_valid = (!busy) && req_valid[0];
+  `else
     arbiter_to_mem.mem_req_valid = (!busy) && (grant_signal != '0);
-    arbiter_to_mem.mem_req_we = req_we[sel_index];
-    arbiter_to_mem.mem_req_addr = req_addr[sel_index];
-    arbiter_to_mem.mem_req_write = req_wdata[sel_index];
+  `endif
+    arbiter_to_mem.mem_req_we = req_we[arb_owner_sel];
+    arbiter_to_mem.mem_req_addr = req_addr[arb_owner_sel];
+    arbiter_to_mem.mem_req_write = req_wdata[arb_owner_sel];
   end
 
   // Initially set ready/valid low so only selected cache gets serviced
@@ -95,9 +107,13 @@ module mem_arbiter #(parameter int N = 3) (
     end
 
     if (!busy) begin
+    `ifdef BUG_ARBITER_PIN_CORE0
+      req_ready[0] = arbiter_to_mem.mem_req_ready;
+    `else
       for (int i = 0; i < N; ++i) begin
         if (grant_signal[i]) req_ready[i] = arbiter_to_mem.mem_req_ready;
       end
+    `endif
     end
     else begin
       resp_valid[owner] = arbiter_to_mem.mem_resp_valid;
@@ -117,7 +133,8 @@ module mem_arbiter #(parameter int N = 3) (
     else begin
       if (enable_req) begin
         busy <= 1'b1;
-	    owner <= sel_index;
+	  owner <= arb_owner_sel;
+	    //owner <= sel_index;
       end
       if (enable_resp) begin
 	    busy <= 1'b0;

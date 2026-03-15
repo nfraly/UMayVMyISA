@@ -27,8 +27,13 @@ module memory (
     string init_path;
     if (!resetN) begin
       for (int i = 0; i < DEPTH; ++i) memory_size[i] = 8'h00;
-      if (!$value$plusargs("INIT_MEM_FILE=%s", init_path)) init_path = "../rtl/init_memory";
+      if (!$value$plusargs("INIT_MEM_FILE=%s", init_path)) init_path = "/init_memory";
+
+      // Bug injection: skip reading memory on reset.
+      // Expected behavior: load expected vs actual mismatches from scoreboard
+      `ifndef BUG_SKIP_READMEMH
       $readmemh(init_path, memory_size);
+      `endif
       resp_data_r <= '0;
       resp_valid_r <= 0;
     end
