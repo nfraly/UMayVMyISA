@@ -12,6 +12,7 @@ import uvm_pkg::*;
 `include "testClean.sv"
 `include "aluDirected.sv"
 `include "randSequence.sv"
+`include "cov.sv"
 `include "sequencer.sv"
 `include "driver.sv"
 `include "monitor.sv"
